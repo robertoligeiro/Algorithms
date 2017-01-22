@@ -18,7 +18,26 @@ namespace Trees
             var n6 = new TreeNode(6);
             var n7 = new TreeNode(7);
             var n8 = new TreeNode(8);
+            var n9 = new TreeNode(9);
+            var n10 = new TreeNode(10);
 
+            //build bst to delete nodes from
+            n3.left = n2;
+            n2.left = n1;
+            n3.right = n5;
+            n5.left = n4;
+            n5.right = n9;
+            n9.left = n7;
+            n9.right = n10;
+            n7.right = n8;
+
+            var d = DeleteNodeBST(n3, 2);
+            d = DeleteNodeBST(n3, 1);
+            d = DeleteNodeBST(n3, 5);
+            d = DeleteNodeBST(n3, 10);
+            d = DeleteNodeBST(n3, 9);
+
+            // reconstruct and compute exterior
             var pre = new List<TreeNode>() { n1, n2, n4, n5, n3, n6, n8, n7 };
             var inO = new List<TreeNode>() { n4, n2, n5, n1, n8, n6, n3, n7 };
             var r = ReconstructTreePreIn.reconstruct(pre, inO);
@@ -27,6 +46,72 @@ namespace Trees
             //var r = ReconstructWMarkers.reconstructPreOrderMarkers(l);
         }
 
+        public static TreeNode DeleteNodeBST(TreeNode root, int v)
+        {
+            return DeleteNode(root, v);
+        }
+
+        public static TreeNode DeleteNode(TreeNode n, int v)
+        {
+            if (n == null) return n;
+
+            // found node, delete it
+            if (n.val == v)
+            {
+                //leaf
+                if (n.left == null && n.right == null)
+                {
+                    return null;
+                }
+
+                // no left child
+                if (n.left == null)
+                {
+                    return n.right;
+                }
+
+                // no right child
+                if (n.right == null)
+                {
+                    return n.left;
+                }
+
+                // has both
+                var successor = FindSuccessor(n.right);
+                successor.left = n.left;
+
+                if (successor != n.right)
+                {
+                    var temp = successor.right;
+                    successor.right = n.right;
+                    n.right.left = temp;
+                }
+                else
+                {
+                    n.right = null;
+                }
+
+                return successor;
+            }
+
+            // recurse finding the node
+            if (n.val > v)
+            {
+                n.left = DeleteNode(n.left, v);
+            }
+            else
+            {
+                n.right = DeleteNode(n.right, v);
+            }
+
+            return n;
+        }
+
+        public static TreeNode FindSuccessor(TreeNode n)
+        {
+            if (n.left == null) return n;
+            return FindSuccessor(n.left);
+        }
         public class ComputeTreeExterior
         {
             public static List<TreeNode> compute(TreeNode root)
