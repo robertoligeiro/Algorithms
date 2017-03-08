@@ -23,6 +23,8 @@ namespace StacksNormalizeFilePath
         {
             var s = new Stack<string>();
             var pArray = p.Split('/');
+            var removeLast = false;
+            if (pArray.LastOrDefault() == string.Empty) removeLast = true;
             foreach (var c in pArray)
             {
                 if (c == ".") continue;
@@ -33,13 +35,8 @@ namespace StacksNormalizeFilePath
                 else s.Push(c);
             }
             if (s.Count == 0) return string.Empty;
-            var resp = new List<string>() { s.Pop()};
-            while (s.Count > 0)
-            {
-                resp.Add(s.Pop());
-            }
-            resp.Reverse();
-            return string.Join("/",resp.ToArray());
+            if (removeLast) s.Pop();
+            return string.Join("/",s.Reverse().ToArray());
         }
     }
 }
