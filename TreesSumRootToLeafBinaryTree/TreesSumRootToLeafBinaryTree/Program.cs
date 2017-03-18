@@ -28,7 +28,7 @@ namespace TreesSumRootToLeafBinaryTree
             n1.left = n3;
             n2.left = n4;
             n2.right = n5;
-            var r = SumBinaryTree(n0);
+            var r = SumBinaryTree(n0); //expected: 18 (101 + 110 + 111)
         }
 
         public static int SumBinaryTree(TreeNode r)
