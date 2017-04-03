@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SortingFindSmallestInCycledSortedArray", "SortingFindSmallestInCycledSortedArray\SortingFindSmallestInCycledSortedArray.csproj", "{B54E2DC6-239E-43A9-A693-5D1F54B2BF9A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B54E2DC6-239E-43A9-A693-5D1F54B2BF9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B54E2DC6-239E-43A9-A693-5D1F54B2BF9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B54E2DC6-239E-43A9-A693-5D1F54B2BF9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B54E2DC6-239E-43A9-A693-5D1F54B2BF9A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
