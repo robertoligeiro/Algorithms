@@ -55,6 +55,7 @@ namespace HashesIsbnCache
                     if(item.next != null) item.next.prev = item.prev;
                     item.next = head.next;
                     item.prev = null;
+                    head.next.prev = item;
                     head.next = item;
                 }
                 return item;
@@ -85,6 +86,7 @@ namespace HashesIsbnCache
                 var item = this.LookUp(isbn);
                 if (item == null) return false;
                 head.next = item.next;
+                head.next.prev = null;
                 cacheMap.Remove(item.isbn);
                 if (item == tail.next) tail.next = null;
                 return true;
