@@ -33,7 +33,9 @@ namespace DynamicProgrammingMaxSumSubArrayKadeneAlgo
                     curr.sum += a[i];
                     if (curr.sum > resp.sum)
                     {
-                        resp = curr;
+                        resp.i = curr.i;
+                        resp.j = curr.j;
+                        resp.sum = curr.sum;
                     }
                 }
                 else
