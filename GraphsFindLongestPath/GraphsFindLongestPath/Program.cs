@@ -30,7 +30,7 @@ namespace GraphsFindLongestPath
             public List<Node> children;
             public bool visited;
             public int dist;
-            public Node(int v) { val = v; children = new List<Node>(); }
+            public Node(int v) { val = v; children = new List<Node>(); dist = -1; }
             public Node Copy()
             {
                 return new Node(this.val);
@@ -40,19 +40,20 @@ namespace GraphsFindLongestPath
         public static int GetMaxPath(Node r)
         {
             int maxSoFar = 0;
-            r.dist = 0;
             var q = new Queue<Node>();
             q.Enqueue(r);
             while (q.Count > 0)
             {
                 var curr = q.Dequeue();
-                curr.visited = true;
                 foreach (var c in curr.children)
                 {
-                    if (c.visited) continue;
-                    c.dist = curr.dist + 1;
+                    if (c.dist == -1)
+                    {
+                        var parentDist = curr.dist != -1 ? curr.dist : 0;
+                        c.dist =  parentDist + 1;
+                        q.Enqueue(c);
+                    }
                     maxSoFar = Math.Max(maxSoFar, c.dist);
-                    q.Enqueue(c);
                 }
             }
 
