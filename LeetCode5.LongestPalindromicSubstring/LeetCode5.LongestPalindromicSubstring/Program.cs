@@ -8,10 +8,12 @@ namespace LeetCode5.LongestPalindromicSubstring
 {
     class Program
     {
+        //https://leetcode.com/problems/longest-palindromic-substring/#/description
         static void Main(string[] args)
         {
             var s = new Solution();
-            var r = s.LongestPalindrome("babad");
+            //var r = s.LongestPalindrome("babad");
+            var r = s.LongestPalindrome("babadaaaaaaabaaaaaaadafg");
         }
         public class Solution
         {
