@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCode464.CanIWin", "LeetCode464.CanIWin\LeetCode464.CanIWin.csproj", "{8254DB95-B7DB-43A1-8527-A17C49F7185C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8254DB95-B7DB-43A1-8527-A17C49F7185C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8254DB95-B7DB-43A1-8527-A17C49F7185C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8254DB95-B7DB-43A1-8527-A17C49F7185C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8254DB95-B7DB-43A1-8527-A17C49F7185C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
