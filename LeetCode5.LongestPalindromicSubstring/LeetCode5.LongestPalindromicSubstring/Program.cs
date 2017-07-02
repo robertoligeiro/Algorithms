@@ -15,38 +15,37 @@ namespace LeetCode5.LongestPalindromicSubstring
             //var r = s.LongestPalindrome("babad");
             var r = s.LongestPalindrome("babadaaaaaaabaaaaaaadafg");
         }
+
         public class Solution
         {
+            private int lo, maxLen;
+
             public string LongestPalindrome(string s)
             {
-                if (string.IsNullOrEmpty(s)) return string.Empty;
-                var resp = string.Empty;
-                for (int i = 0; i < s.Length; ++i)
+                int len = s.Length;
+                if (len < 2)
+                    return s;
+
+                for (int i = 0; i < len - 1; i++)
                 {
-                    if (IsPalindrome(s, 0, i))
-                    {
-                        if (i > resp.Length - 1) resp = s.Substring(0, i + 1);
-                        if ((s.Length - i + 1) > resp.Length)
-                        {
-                            var respFromSub = LongestPalindrome(s.Substring(i + 1));
-                            if (respFromSub.Length > resp.Length)
-                            {
-                                resp = respFromSub;
-                            }
-                        }
-                    }
+                    extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
+                    extendPalindrome(s, i, i + 1); //assume even length.
                 }
-                return resp;
+                return s.Substring(lo,maxLen);
             }
 
-            private bool IsPalindrome(string s, int l, int r)
+            private void extendPalindrome(string s, int j, int k)
             {
-                while (l < r)
+                while (j >= 0 && k < s.Length && s[j] == s[k])
                 {
-                    if (s[l++] != s[r--]) return false;
+                    j--;
+                    k++;
                 }
-
-                return true;
+                if (maxLen < k - j - 1)
+                {
+                    lo = j + 1;
+                    maxLen = k - j - 1;
+                }
             }
         }
     }
