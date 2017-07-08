@@ -11,15 +11,37 @@ namespace SortingFindTheKLargestInArray
         static void Main(string[] args)
         {
             //var a = new List<int>() { 3, 2, 1, 5, 4 };
-            var a = new List<int>();
+            var a = new HashSet<int>();
             Random rd = new Random();
             for (int i = 0; i < 10; ++i)
             {
                 a.Add(rd.Next(0,10000));
             }
-            var r = FindK(a, 2);
+            var resp = a.ToList();
+            resp.Sort();
+            var r = FindK(a.ToList(), 2);
+            var r1 = FindKUsingHeap(a.ToList(), 2);
         }
 
+        public static int FindKUsingHeap(List<int> a, int k)
+        {
+            var h = new SortedSet<int>();
+            foreach (var i in a)
+            {
+                if (h.Count < k)
+                {
+                    h.Add(i);
+                    continue;
+                }
+
+                if (h.FirstOrDefault() < i)
+                {
+                    h.Remove(h.FirstOrDefault());
+                    h.Add(i);
+                }
+            }
+            return h.FirstOrDefault();
+        }
         public static int FindK(List<int> a, int k)
         {
             return FindK(a, a.Count - k + 1, 0, a.Count - 1);
