@@ -48,25 +48,22 @@ namespace TreesComputeLca
         }
         public static TreeNode ComputeLca(TreeNode r, TreeNode a, TreeNode b)
         {
-            var lca = new Lca();
-            lca = ComputeLca(r, a, b, lca);
-            return lca.found == 2 ? lca.parent : null;
+            return ComputeLcaH(r, a, b).parent;
         }
-        public static Lca ComputeLca(TreeNode n, TreeNode a, TreeNode b, Lca lca)
+        public static Lca ComputeLcaH(TreeNode n, TreeNode a, TreeNode b)
         {
-            if (n == null) return lca;
-            var initialFound = lca.found;
-            if (n == a || n == b)
-            {
-                lca.found++;
-                if (lca.found == 1) lca.parent = n;
-                if (lca.found == 2) return lca;
-            }
+            if (n == null) return new Lca();
+            var l = ComputeLcaH(n.left, a, b);
+            if (l.found == 2) return l;
 
-            lca = ComputeLca(n.left, a, b, lca);
-            if (lca.found == 2) return lca;
-            if (initialFound == 0 && lca.found == 1) lca.parent = n;
-            return ComputeLca(n.right, a, b, lca); 
+            var r = ComputeLcaH(n.right, a, b);
+            if (r.found == 2) return r;
+
+            var lca = new Lca();
+            lca.found = l.found + r.found;
+            if (n == a || n == b) lca.found++;
+            if (lca.found == 2) lca.parent = n;
+            return lca;
         }
     }
 }
