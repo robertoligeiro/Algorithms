@@ -20,53 +20,33 @@ namespace BstFindTheClosestInterval
 
         public static List<int> FindClosestInterval(List<List<int>> a)
         {
+            var q0 = new Queue<int>(a[0]);
+            var q1 = new Queue<int>(a[1]);
+            var q2 = new Queue<int>(a[2]);
+
             var resp = new List<int>();
-            var d = new SortedDictionary<int, List<int>>();
-            for (int i = 0; i < a.Count; ++i)
+            var minDiffSoFar = int.MaxValue;
+            var diffList = new List<Tuple<int, int>>();
+            diffList.Add(new Tuple<int, int>(q0.Dequeue(), 0));
+            diffList.Add(new Tuple<int, int>(q1.Dequeue(), 1));
+            diffList.Add(new Tuple<int, int>(q2.Dequeue(), 2));
+            while (q0.Count >= 0 && q1.Count >= 0 && q2.Count >= 0)
             {
-                AddToDictionary(a[i][0], i, d);
-                a[i].RemoveAt(0);
-            }
-            var minSoFar = int.MaxValue;
-
-            while (true)
-            {
-                var currDist = 0;
-                var prev = d.Keys.First();
-                for (int i = 1; i < d.Count; ++i)
+                diffList.Sort();
+                if (diffList.Count != 3) break;
+                var localDiff = (diffList[2].Item1 - diffList[1].Item1) + (diffList[1].Item1 - diffList[0].Item1);
+                if (localDiff < minDiffSoFar)
                 {
-                   currDist += Math.Abs(d.Keys.ElementAt(i) - prev);
-                   prev = d.Keys.ElementAt(i);
+                    minDiffSoFar = localDiff;
+                    resp = diffList.Select(x => x.Item1).ToList();
                 }
-                if (currDist < minSoFar)
-                {
-                    minSoFar = currDist;
-                    resp = d.Select(x => x.Key).ToList();
-                }
-
-                var t = d.FirstOrDefault();
-
-                var nextList = t.Value.FirstOrDefault();
-                if (a[nextList].Count == 0) break;
-
-                t.Value.RemoveAt(0);
-                AddToDictionary(a[nextList][0], nextList, d);
-                a[nextList].RemoveAt(0);
-                if (t.Value.Count == 0) d.Remove(t.Key);
+                var t = diffList[0];
+                diffList.RemoveAt(0);
+                if (t.Item2 == 0 && q0.Count > 0) diffList.Add(new Tuple<int, int>(q0.Dequeue(), 0));
+                if (t.Item2 == 1 && q1.Count > 0) diffList.Add(new Tuple<int, int>(q1.Dequeue(), 1));
+                if (t.Item2 == 2 && q2.Count > 0) diffList.Add(new Tuple<int, int>(q2.Dequeue(), 2));
             }
-
             return resp;
-        }
-
-        public static void AddToDictionary(int key, int val, SortedDictionary<int, List<int>> d)
-        {
-            List<int> l;
-            if (d.TryGetValue(key, out l))
-            {
-                l.Add(val);
-            }
-            else
-                d.Add(key, new List<int>() { val });
         }
     }
 }
