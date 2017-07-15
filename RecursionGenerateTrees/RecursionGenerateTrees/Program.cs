@@ -10,7 +10,8 @@ namespace RecursionGenerateTrees
     {
         static void Main(string[] args)
         {
-            var r = GenerateTrees(4);
+            var r = GetTrees(4);
+            r = GetTrees(3);
         }
 
         public class Node
@@ -20,43 +21,38 @@ namespace RecursionGenerateTrees
             public int val;
         }
 
-        public static List<Node> GenerateTrees(int n)
+        public static List<Node> GetTrees(int n)
         {
-            var l = Enumerable.Range(1, n).ToList();
-            return GenerateTrees(l);
+            var values = Enumerable.Range(1, n).ToList();
+            return GetTrees(values);
         }
-
-        public static List<Node> GenerateTrees(List<int> l)
+        public static List<Node> GetTrees(List<int> values)
         {
-            if (l.Count == 0) return new List<Node>() { new Node { val = -1 } };
+            if (values == null) return new List<Node> { new Node() { val = -1 } };
 
             var trees = new List<Node>();
-            for (int i = 0; i < l.Count; ++i)
+            for (int i = 0; i < values.Count; ++i)
             {
-                var left = l.GetRange(0, i);
-                var right = l.GetRange(i + 1, l.Count - 1 - i);
-                trees.AddRange(GenerateTrees(l[i], left, right));
+                var left = i == 0 ? null : values.GetRange(0, i);
+                var right = i == values.Count - 1 ? null : values.GetRange(i + 1, values.Count - i - 1);
+                var leftTrees = GetTrees(left);
+                var rightTrees = GetTrees(right);
+                CombineTrees(values[i], leftTrees, rightTrees, trees);
             }
             return trees;
         }
-        public static List<Node> GenerateTrees(int v, List<int> l, List<int> r)
+        public static void CombineTrees(int n, List<Node> left, List<Node> right, List<Node> trees)
         {
-            var left = GenerateTrees(l);
-            var right = GenerateTrees(r);
-            var resp = new List<Node>();
-            foreach (var nl in left)
+            foreach (var l in left)
             {
-                foreach (var nr in right)
+                foreach (var r in right)
                 {
-                    var root = new Node() { val = v };
-                    root.left = nl;
-                    root.right = nr;
-                    resp.Add(root);
+                    var node = new Node() { val = n };
+                    node.left = l.val == -1 ? null : l;
+                    node.right = r.val == -1 ? null : r;
+                    trees.Add(node);
                 }
             }
-
-            return resp;
         }
-
     }
 }
