@@ -25,6 +25,7 @@ namespace RecursionStringPalindromeDecompositions
             if (index == s.Length)
             {
                 resp.Add(new List<string>(parc));
+                return;
             }
             for (int i = index; i < s.Length; ++i)
             {
