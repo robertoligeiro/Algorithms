@@ -10,42 +10,38 @@ namespace RecursionStringPalindromeDecompositions
     {
         static void Main(string[] args)
         {
-            var r = GetPalDeco("0204451881");
+            var r1 = GetPalindromeDeco("0204451881");
         }
 
-        public static List<List<string>> GetPalDeco(string s)
+        public static List<List<string>> GetPalindromeDeco(string s)
         {
             var resp = new List<List<string>>();
             var parc = new List<string>();
-            GetPalDeco(s, resp, parc);
+            GetPalindromeDeco(s, resp, parc, 0);
             return resp;
         }
-
-        public static void GetPalDeco(string s, List<List<string>> r, List<string> p)
+        public static void GetPalindromeDeco(string s, List<List<string>> resp, List<string> parc, int index)
         {
-            if (s.Length == 0)
+            if (index == s.Length)
             {
-                r.Add(new List<string>(p));
-                return;
+                resp.Add(new List<string>(parc));
             }
-
-            for (int i = 0; i < s.Length; ++i)
+            for (int i = index; i < s.Length; ++i)
             {
-                var t = s.Substring(0, i + 1);
-                if (IsPalindrome(t))
+                if (IsPal(s, index, i))
                 {
-                    var localP = new List<string>(p);
-                    localP.Add(t);
-                    GetPalDeco(s.Substring(i + 1, s.Length - i - 1), r, localP);
+                    parc.Add(s.Substring(index, i - index + 1));
+                    GetPalindromeDeco(s, resp, parc, i + 1);
+                    parc.RemoveAt(parc.Count - 1);
                 }
             }
         }
 
-        public static bool IsPalindrome(string s)
+        public static bool IsPal(string s, int l, int r)
         {
-            for (int i = 0, j = s.Length - 1; i < j; ++i, --j)
+            while (l < r)
             {
-                if (s[i] != s[j]) return false;
+                if (s[l++] != s[r--]) return false;
             }
             return true;
         }
