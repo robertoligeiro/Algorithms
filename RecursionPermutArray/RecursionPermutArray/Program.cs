@@ -10,7 +10,9 @@ namespace RecursionPermutArray
     {
         static void Main(string[] args)
         {
-            var r = PermutArray(new List<int>() { 2, 3, 5, 7 });
+            var r = PermutArray(new List<int>() { 1,2,3 });
+            r = PermutArray(new List<int>() { 1,2,2 });
+            r = PermutArray(new List<int>() { 2, 3, 5, 7 });
         }
 
         public static List<List<int>> PermutArray(List<int> a)
@@ -40,17 +42,15 @@ namespace RecursionPermutArray
                 return;
             }
 
-            var localM = new Dictionary<int, int>(m);
-            var localP = new List<int>(p);
-            for (int i = 0; i < localM.Count; ++i)
+            for (int i = 0; i < m.Count; ++i)
             {
-                if (localM.ElementAt(i).Value > 0)
+                if (m.ElementAt(i).Value > 0)
                 {
-                    localM[localM.ElementAt(i).Key]--;
-                    localP.Add(localM.ElementAt(i).Key);
-                    PermutArray(a, localM, r, localP);
-                    localM[localM.ElementAt(i).Key]++;
-                    localP.RemoveAt(localP.Count - 1);
+                    m[m.ElementAt(i).Key]--;
+                    p.Add(m.ElementAt(i).Key);
+                    PermutArray(a, m, r, p);
+                    m[m.ElementAt(i).Key]++;
+                    p.RemoveAt(p.Count - 1);
                 }
             }
         }
