@@ -11,7 +11,7 @@ namespace RecursionComputeTreeDiameter
         static void Main(string[] args)
         {
             var r = CreateTree(new int[] {10, 5, 4, 3, 1, 6, 7, 8, 11 });
-            GetMaxDia(r);
+            var resp = GetTreeMaxDiameter(r);
         }
 
         public class Node
@@ -21,28 +21,22 @@ namespace RecursionComputeTreeDiameter
             public int val;
         }
 
-        public class MaxDia
+        public static int GetTreeMaxDiameter(Node n)
         {
-            public int dia;
-            public Node root;
+            var max = 0;
+            GetTreeMaxDiameter(n, ref max);
+            return max;
         }
 
-        public static MaxDia max = new MaxDia();
-        public static int GetMaxDia(Node n)
+        public static int GetTreeMaxDiameter(Node n, ref int max)
         {
             if (n == null) return 0;
-            var l = GetMaxDia(n.left);
-            var r = GetMaxDia(n.right);
-            var localDia = l + r + 1;
-            if (localDia > max.dia)
-            {
-                max.dia = localDia;
-                max.root = n;
-            }
-
+            var l = GetTreeMaxDiameter(n.left, ref max);
+            var r = GetTreeMaxDiameter(n.right, ref max);
+            var dia = l + r + 1;
+            max = Math.Max(max, dia);
             return Math.Max(l, r) + 1;
         }
-
         public static Node CreateTree(int[] values)
         {
             var root = new Node() { val = values[0] };
