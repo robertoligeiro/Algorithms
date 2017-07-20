@@ -19,7 +19,7 @@ namespace LeetCode61.RotateList
             n1.next = n2; n2.next = n3; n3.next = n4; n4.next = n5;
 
             var s = new Solution();
-            var r = s.RotateRight(n1, 24);
+            var r = s.RotateRight(n1, 2);
         }
 
         public class ListNode {
@@ -36,26 +36,26 @@ namespace LeetCode61.RotateList
                 var size = GetSize(head);
                 k = k % size;
                 if (k == 0) return head;
-                var runner = head;
-                while (k-- > 0)
-                {
-                    runner = runner.next;
-                }
 
-                ListNode nHead = head;
-                ListNode prev = null;
+                //find new head
+                var distToNewHead = size - k;
+                var newHead = head;
                 ListNode tail = null;
-                while (runner != null)
+                while (distToNewHead-- > 0)
                 {
-                    prev = nHead;
-                    nHead = nHead.next;
-                    tail = runner;
-                    runner = runner.next;
+                    tail = newHead;
+                    newHead = newHead.next;
                 }
 
-                prev.next = null;
+                //connect new tail
+                tail.next = null;
+                tail = newHead;
+                while (tail.next != null)
+                {
+                    tail = tail.next;
+                }
                 tail.next = head;
-                return nHead;
+                return newHead;
             }
 
             private int GetSize(ListNode head)
