@@ -8,6 +8,7 @@ namespace LeetCode384.ShuffleanArray
 {
     class Program
     {
+        //https://leetcode.com/problems/shuffle-an-array/description/
         static void Main(string[] args)
         {
             var s = new Solution(new int[] { 1,2,3});
