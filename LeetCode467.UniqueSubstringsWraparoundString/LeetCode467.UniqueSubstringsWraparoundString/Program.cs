@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LeetCode467.UniqueSubstringsWraparoundString
 {
+    //https://leetcode.com/problems/unique-substrings-in-wraparound-string/description/
     class Program
     {
         static void Main(string[] args)
