@@ -24,7 +24,13 @@ namespace LeetCode214.ShortestPalindrome
                 int l;
                 for (l = n; l >= 0; --l)
                 {
+                    //s.Substring(0, l) - substring from 0 to l {0-len, 0-len-1, 0-len-2, ...}
+                    //sReversed.Substring(n - l) - substring starting at index n-1 {0, 1, 2, 3,...}
                     if (s.Substring(0, l) == sReversed.Substring(n - l)) break;
+                    // aacecaaa == aaacecaa -> false
+                    // ^      ^    ^      ^
+                    // aacecaaa == aaacecaa -> true
+                    // ^     ^      ^     ^
                 }
 
                 return sReversed.Substring(0, n - l) + s;
