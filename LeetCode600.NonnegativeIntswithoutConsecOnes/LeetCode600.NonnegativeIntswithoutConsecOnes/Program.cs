@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace LeetCode600.NonnegativeIntswithoutConsecOnes
 {
+    //https://leetcode.com/problems/non-negative-integers-without-consecutive-ones/description/
     class Program
     {
         static void Main(string[] args)
