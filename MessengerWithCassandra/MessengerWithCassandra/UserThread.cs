@@ -12,7 +12,7 @@ namespace MessengerWithCassandra
         public string threadId { get; set; }
         public string postedTime { get; set; }
         public string threadName { get; set; }
-        public List<string> participants { get; set; }
-        public List<string> participantsUuids { get; set; }
+        public string participants { get; set; }
+        public List<User> participantsDetails = new List<User>();
     }
 }

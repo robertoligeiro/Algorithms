@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MessengerWithCassandra
 {
-    public class MessageThread
+    public class UserMsgSession
     {
-        public List<ThreadItem> items = new List<ThreadItem>();
+        public User userdetails { get; set; }
+        public List<UserThread> threads = new List<UserThread>();
     }
 }
