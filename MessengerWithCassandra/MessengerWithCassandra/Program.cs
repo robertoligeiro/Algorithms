@@ -29,10 +29,24 @@ namespace MessengerWithCassandra
             {
                 if (cmd == "threads")
                 {
+                    userMsgSession = GetUserMsgSession(args[0]);
                     foreach (var t in userMsgSession.threads)
                     {
-                        Console.WriteLine("tId: " + t.threadId + " tName: " + t.threadName + " tPostDate: " + t.postedTime);
+                        if(t.isActive) Console.WriteLine("tId: " + t.threadId + " tName: " + t.threadName + " tPostDate: " + t.postedTime);
                     }
+                }
+                if (cmd == "createthread")
+                {
+                    Console.WriteLine("Enter thread name:");
+                    var threadname = Console.ReadLine();
+
+                    Console.WriteLine("Enter participants list:");
+                    var participants = Console.ReadLine();
+
+                    Console.WriteLine("Enter participants list ids:");
+                    var participantsIds = Console.ReadLine();
+
+                    CreateThread(userMsgSession.userdetails.userid, Guid.NewGuid().ToString(), threadname, participants, participantsIds);
                 }
                 if (cmd == "readthread")
                 {
@@ -47,26 +61,28 @@ namespace MessengerWithCassandra
                     var msg = Console.ReadLine();
                     if (msg != "n")
                     {
-                        SendMessage(id, userMsgSession.userdetails.userid, msg, userMsgSession.userdetails.username);
+                        SendMessage(userMsgSession.GetUserThread(id), userMsgSession.userdetails.userid, msg, userMsgSession.userdetails.username);
                     }
                 }
             }
         }
 
-        public static void UpdateThreadPostDate(string date, string threadId)
-        {
-            string query = "UPDATE UserThreadsTimestampDesc SET postedTime='{0}' WHERE threadId = '{1}'";
-            query = string.Format(query, date, threadId);
-            var resp = cassandraClient.ExecuteQuery(query);
-        }
-        public static void SendMessage(string threadId, string userid, string msg, string senderName)
+        public static void CreateThread(string userid, string threadId, string threadName, string participants, string participantsIds)
         {
             var messageThread = new MessageThread();
+            var d = DateTime.UtcNow.ToString("s");
+            string query = "INSERT INTO UserThreads (userid, threadId, postedTime, threadName, participants, participantsIds, isActive) VALUES({0}, {1}, '{2}', '{3}', '{4}', '{5}', true)";
+            query = string.Format(query, userid, threadId, d, threadName, participants, participantsIds);
+            var resp = cassandraClient.ExecuteQuery(query);
+        }
+
+        public static void SendMessage(UserThread thread, string userid, string msg, string senderName)
+        {
             string query = "INSERT INTO Thread (threadId, postedTime, userid, body, senderName) VALUES ({0}, '{1}', {2},'{3}', '{4}');";
             var d = DateTime.UtcNow.ToString("s");
-            query = string.Format(query, threadId, d, userid, msg, senderName);
+            query = string.Format(query, thread.threadId, d, userid, msg, senderName);
             var resp = cassandraClient.ExecuteQuery(query);
-            UpdateThreadPostDate(d, threadId);
+            CreateThread(userid, thread.threadId, thread.threadName, thread.participants, thread.participantsIds);
         }
 
         public static MessageThread GetThread(string threadId)
@@ -90,30 +106,11 @@ namespace MessengerWithCassandra
         {
             var userMsgSession = new UserMsgSession();
             userMsgSession.userdetails = GetUser(userid);
-            var resp = cassandraClient.ExecuteQuery("select json * from UserThreadsTimestampDesc where userid = " + userid);
+            var resp = cassandraClient.ExecuteQuery("select json * from UserThreads where userid = " + userid);
             foreach (var row in resp.GetRows())
             {
                 var thread = JsonConvert.DeserializeObject<UserThread>(row.GetValue<string>(0));
                 userMsgSession.threads.Add(thread);
-            }
-
-            var participantsMap = new Dictionary<string, User>();
-            foreach (var thread in userMsgSession.threads)
-            {
-                var p = thread.participants.Split(',');
-                foreach (var id in p)
-                {
-                    User u;
-                    if (participantsMap.TryGetValue(id, out u))
-                    {
-                    }
-                    else
-                    {
-                        u = GetUser(id);
-                        participantsMap.Add(id, u);
-                    }
-                    thread.participantsDetails.Add(u);
-                }
             }
             return userMsgSession;
         }

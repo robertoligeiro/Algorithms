@@ -13,6 +13,7 @@ namespace MessengerWithCassandra
         public string postedTime { get; set; }
         public string threadName { get; set; }
         public string participants { get; set; }
-        public List<User> participantsDetails = new List<User>();
+        public string participantsIds { get; set; }
+        public bool isActive { get; set; }
     }
 }

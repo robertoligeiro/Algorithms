@@ -10,5 +10,9 @@ namespace MessengerWithCassandra
     {
         public User userdetails { get; set; }
         public List<UserThread> threads = new List<UserThread>();
+        public UserThread GetUserThread(string threadid)
+        {
+            return threads.Where(x => x.threadId == threadid).First();
+        }
     }
 }
