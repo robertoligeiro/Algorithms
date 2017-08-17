@@ -14,6 +14,5 @@ namespace MessengerWithCassandra
         public string threadName { get; set; }
         public string participants { get; set; }
         public string participantsIds { get; set; }
-        public bool isActive { get; set; }
     }
 }
