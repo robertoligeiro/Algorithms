@@ -16,25 +16,50 @@ namespace LeetCode324.WiggleSortII
             //var n = new int[] { 1, 5, 1, 1, 6, 4 };
             //s.WiggleSort(n);
 
-            var n = new int[] { 1, 3, 2, 2, 3, 1 };
+            //var n = new int[] { 1, 3, 2, 2, 3, 1 };
+            var n = new int[] { 1, 2, 2, 1, 2, 1, 1, 1, 2, 2, 1, 2, 1, 2, 1, 1, 2};
+//            var n = new int[] { 1, 1, 2, 1, 2, 2, 1 };
             s.WiggleSort(n);
         }
+
         public class Solution
         {
             public void WiggleSort(int[] nums)
             {
                 int median = FindK(nums, (nums.Length - 1) / 2);
-                var l = 1;
-                var r = nums.Length - 2;
-                while (l < r)
+                int n = nums.Length - 1;
+                var left = 0;
+                var i = 0;
+                var right = n - 1;
+                while (i <= right)
                 {
-                    var t = nums[l];
-                    nums[l] = nums[r];
-                    nums[r] = t;
-                    l += 2;
-                    r -= 2;
+                    if (nums[newIndex(i, n)] > median)
+                    {
+                        var newIndexLeft = newIndex(left++, n);
+                        var newIndexI = newIndex(i++, n);
+                        var t = nums[newIndexLeft];
+                        nums[newIndexLeft] = nums[newIndexI];
+                        nums[newIndexI] = t;
+                    }
+                    else if (nums[newIndex(i, n)] < median)
+                    {
+                        var newIndexRight = newIndex(right--, n);
+                        var newIndexI = newIndex(i, n);
+                        var t = nums[newIndexRight];
+                        nums[newIndexRight] = nums[newIndexI];
+                        nums[newIndexI] = t;
+                    }
+                    else
+                    {
+                        i++;
+                    }
                 }
             }
+            private int newIndex(int index, int n)
+            {
+                return (1 + 2 * index) % (n | 1);
+            }
+
             private int FindK(int[] a, int k)
             {
                 return FindK(a, a.Length - k + 1, 0, a.Length - 1);
