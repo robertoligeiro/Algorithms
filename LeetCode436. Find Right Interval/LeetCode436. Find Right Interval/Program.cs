@@ -26,19 +26,18 @@ namespace LeetCode436.Find_Right_Interval
             public int[] FindRightInterval(Interval[] intervals)
             {
                 var sortedStarts = new List<Tuple<int,int>>();
-                var sortedEnds = new List<Tuple<int, int>>();
+                var Ends = new List<Tuple<int, int>>();
                 for (int i = 0; i < intervals.Length; ++i)
                 {
                     sortedStarts.Add(new Tuple<int, int>(intervals[i].start, i));
-                    sortedEnds.Add(new Tuple<int, int>(intervals[i].end, i));
+                    Ends.Add(new Tuple<int, int>(intervals[i].end, i));
                 }
                 sortedStarts.Sort();
-                sortedEnds.Sort();
                 var resp = new int[intervals.Length];
-                for (int i = 0; i < sortedEnds.Count; ++i)
+                for (int i = 0; i < Ends.Count; ++i)
                 {
-                    var index = BinSearch(sortedStarts, sortedEnds[i]);
-                    resp[sortedEnds[i].Item2] = index;
+                    var index = BinSearch(sortedStarts, Ends[i]);
+                    resp[Ends[i].Item2] = index;
                 }
                 return resp;
             }
