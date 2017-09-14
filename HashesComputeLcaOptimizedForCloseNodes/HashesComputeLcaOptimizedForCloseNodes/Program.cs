@@ -43,10 +43,16 @@ namespace HashesComputeLcaOptimizedForCloseNodes
             var visitedNodes = new HashSet<TreeNode>();
             while (a != null || b != null)
             {
-                if (a != null && !visitedNodes.Add(a)) return a;
-                if (b != null && !visitedNodes.Add(b)) return b;
-                if(a!= null) a = a.parent;
-                if(b != null) b = b.parent;
+                if (a != null)
+                {
+                    if (!visitedNodes.Add(a)) return a;
+                    a = a.parent;
+                }
+                if (b != null)
+                {
+                    if (!visitedNodes.Add(b)) return b;
+                    b = b.parent;
+                }
             }
 
             return null;
