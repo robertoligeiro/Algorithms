@@ -13,52 +13,48 @@ namespace HashesFindSmallestSubArrayWithAllTermsV2
             var r = GetSmallestSubArray(new List<string>() { "banana", "apple", "tea", "car", "car", "banana" }, new HashSet<string>() { "banana","car"});
             var r1 = GetSmallestSubArray(new List<string>() { "banana", "apple", "tea", "car", "car", "banana" }, new HashSet<string>() { "banana", "tea", "car" });
         }
-
         public static Tuple<int, int> GetSmallestSubArray(List<string> words, HashSet<string> term)
         {
-            var found = new Dictionary<string,int>();
-            var l = 0;
-            var r = 0;
-            var resp = new Tuple<int, int>(-1,-1);
-            var notDone = true;
-            while (notDone)
+            var min = int.MaxValue;
+            var m = new Dictionary<string, int>();
+            var i = 0;
+            var j = 0;
+            var resp1 = -1;
+            var resp2 = -1;
+            while (j < words.Count)
             {
-                notDone = false;
-                while (l < r)
+                while (j < words.Count && m.Count < term.Count)
                 {
-                    if (resp.Item1 == -1 || r - l < resp.Item2 - resp.Item1)
-                    {
-                        resp = new Tuple<int, int>(l, r - 1);
-                    }
-
-                    var count = 0;
-                    if (found.TryGetValue(words[l], out count))
-                    {
-                        if (--count == 0) found.Remove(words[l]);
-                        else found[words[l]] = count;
-                    }
-
-                    l++;
-                    if (found.Count < term.Count) break;
-                }
-
-                while (r < words.Count && found.Count < term.Count)
-                {
-                    if (term.Contains(words[r]))
+                    if (term.Contains(words[j]))
                     {
                         var count = 0;
-                        if (found.TryGetValue(words[r], out count))
+                        if (!m.TryGetValue(words[j], out count))
                         {
-                            found[words[r]] = ++count;
+                            m.Add(words[j], 1);
                         }
-                        else found.Add(words[r], 1);
+                        else m[words[j]] = ++count;
                     }
-                    r++;
-                    notDone = true;
+                    ++j;
+                }
+                while (i < j && m.Count == term.Count)
+                {
+                    var localMin = j - i - 1;
+                    if (localMin < min)
+                    {
+                        resp1 = i;
+                        resp2 = j - 1;
+                        min = localMin;
+                    }
+                    var count = 0;
+                    if (m.TryGetValue(words[i], out count))
+                    {
+                        if (--count == 0) m.Remove(words[i]);
+                        else m[words[i]] = count;
+                    }
+                    ++i;
                 }
             }
-
-            return resp;
+            return new Tuple<int, int>(resp1, resp2);
         }
     }
 }
