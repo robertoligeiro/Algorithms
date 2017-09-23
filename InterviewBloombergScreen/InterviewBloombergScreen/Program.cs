@@ -25,9 +25,30 @@ namespace InterviewBloombergScreen
 
         public static int FindNonRepeated(List<int> nums)
         {
-            return FindNonRepeated(nums, 0, nums.Count - 1);
+            var l = 0;
+            var r = nums.Count;
+            while (l < r)
+            {
+                var mid = l + (r - l) / 2;
+                if (mid % 2 == 0)
+                {
+                    if (mid + 1 < nums.Count && nums[mid] == nums[mid + 1]) l = mid + 2;
+                    else r = mid - 1;
+                }
+                else
+                {
+                    if (mid + 1 < nums.Count && nums[mid] == nums[mid + 1]) r = mid - 1;
+                    else l = mid + 1;
+                }
+            }
+            return nums[l];
         }
-        public static int FindNonRepeated(List<int> nums, int l, int r)
+
+        public static int FindNonRepeated2(List<int> nums)
+        {
+            return FindNonRepeated2(nums, 0, nums.Count - 1);
+        }
+        public static int FindNonRepeated2(List<int> nums, int l, int r)
         {
             if (l > r) throw new ArgumentException("non repeated doesn't exist");
             if (l == r) return nums[l];
