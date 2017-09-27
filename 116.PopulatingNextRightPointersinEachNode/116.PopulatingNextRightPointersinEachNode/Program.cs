@@ -8,6 +8,7 @@ namespace _116.PopulatingNextRightPointersinEachNode
 {
     class Program
     {
+        //https://leetcode.com/problems/populating-next-right-pointers-in-each-node/description/
         static void Main(string[] args)
         {
             var stree = "1,2,4,6,8,n,n,n,n,5,n,7,n,9,n,n,3,n,n";
