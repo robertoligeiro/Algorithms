@@ -10,12 +10,57 @@ namespace LeetCode64.Minimum_Path_Sum
     {
         static void Main(string[] args)
         {
-            var g = new int[,] { { 0, 0, 0, 5 }, { 1, 1, 1, 0 }, { 2, 2, 2, 0 }, { 3, 3, 3, 0 } };
-            //var g = new int[,] { { 0, 0}, { 0, 1 } };
+            //var g = new int[,] { { 0, 0, 0, 5 }, { 1, 1, 1, 0 }, { 2, 2, 2, 0 }, { 3, 3, 3, 0 } };
+            var g = new int[,] { { 0, 0}, { 0, 1 } };
             var s = new Solution();
             var r = s.MinPathSum(g);
         }
         public class Solution
+        {
+            public int MinPathSum(int[,] grid)
+            {
+                var memo = new int[grid.GetLength(0),grid.GetLength(1)];
+                for (int r = 0; r < memo.GetLength(0); ++r)
+                {
+                    for (int c = 0; c < memo.GetLength(1); ++c) memo[r, c] = -1;
+                }
+                return MinPathSum(grid, 0, 0, memo);
+            }
+            private int MinPathSum(int[,] grid, int r, int c, int[,] memo)
+            {
+                if (r == grid.GetLength(0) - 1 && c == grid.GetLength(1) - 1)
+                {
+                    return grid[r, c];
+                }
+                if (memo[r, c] != -1) return memo[r, c];
+                var right = -1;
+                if (c + 1 < grid.GetLongLength(1))
+                {
+                    right = MinPathSum(grid, r, c + 1, memo);
+                }
+                var down = -1;
+                if (r + 1 < grid.GetLength(0))
+                {
+                    down = MinPathSum(grid, r + 1, c, memo);
+                }
+                var min = 0;
+                if (right != -1 && down != -1)
+                {
+                    min = Math.Min(right, down);
+                }
+                else if (right != -1)
+                {
+                    min = right;
+                }
+                else min = down;
+                memo[r, c] = min + grid[r,c];
+                return memo[r, c];
+            }
+        }
+
+        // solution above performs betters, since it's better use the memo data structure - more optimized.
+        // but solution is pretty much the same.
+        public class Solution1
         {
             public int MinPathSum(int[,] grid)
             {
