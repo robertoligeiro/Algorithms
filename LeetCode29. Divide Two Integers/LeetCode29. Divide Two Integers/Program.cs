@@ -14,7 +14,7 @@ namespace LeetCode29.Divide_Two_Integers
             var r = snaive.Divide(8, 2);
 
             var s = new Solution();
-            var r1 = s.Divide(8, 2);
+            var r1 = s.Divide(-2147483648, -1);
         }
         public class SolutionNaive
         {
@@ -34,20 +34,42 @@ namespace LeetCode29.Divide_Two_Integers
         {
             public int Divide(int dividend, int divisor)
             {
-                var resp = 0;
-                while (dividend >= divisor)
+                long tdividend = dividend;
+                long tdivisor = divisor;
+                var isNeg = false;
+                if (dividend < 0 && divisor < 0)
                 {
-                    var tempDivisor = divisor;
+                    tdividend = Math.Abs(tdividend);
+                    tdivisor = Math.Abs(tdivisor);
+                }
+                else if (dividend < 0 || divisor < 0)
+                {
+                    tdividend = Math.Abs(tdividend);
+                    tdivisor = Math.Abs(tdivisor);
+                    isNeg = true;
+                }
+                if (tdivisor == 1)
+                {
+                    if (isNeg)
+                    {
+                        return (int)-tdividend;
+                    }
+                    return (int)tdividend;
+                }
+                var resp = 0;
+                while (tdividend >= tdivisor)
+                {
+                    var tempDivisor = tdivisor;
                     var mult = 1;
-                    while (dividend >= (tempDivisor << 1))
+                    while (tdividend >= (tempDivisor << 1))
                     {
                         tempDivisor <<= 1;
                         mult <<= 1;
                     }
-                    dividend -= tempDivisor;
+                    tdividend -= tempDivisor;
                     resp += mult;
                 }
-                return resp;
+                return isNeg? -resp:resp;
             }
         }
     }
