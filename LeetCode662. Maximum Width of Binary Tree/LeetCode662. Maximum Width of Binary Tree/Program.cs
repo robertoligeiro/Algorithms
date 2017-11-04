@@ -27,8 +27,6 @@ namespace LeetCode662.Maximum_Width_of_Binary_Tree
 		}
 		public class Solution
 		{
-			private static TreeNode voidNode = new TreeNode(-1);
-
 			public int WidthOfBinaryTree(TreeNode root)
 			{
 				if (root == null) return 0;
@@ -55,17 +53,12 @@ namespace LeetCode662.Maximum_Width_of_Binary_Tree
 				while (from.Count > 0)
 				{
 					var curr = from.Dequeue();
-					if (curr.n != voidNode)
-					{
-						if (widthStart == -1) widthStart = curr.pos;
-						widthEnd = curr.pos;
-						var leftPos = (curr.pos * 2) - 1;
-						var rightPos = curr.pos * 2;
-						if (curr.n.left != null) to.Enqueue(new TreeNodePos(leftPos, curr.n.left));
-						else to.Enqueue(new TreeNodePos(leftPos, voidNode));
-						if (curr.n.right != null) to.Enqueue(new TreeNodePos(rightPos, curr.n.right));
-						else to.Enqueue(new TreeNodePos(rightPos, voidNode));
-					}
+					if (widthStart == -1) widthStart = curr.pos;
+					widthEnd = curr.pos;
+					var leftPos = (curr.pos * 2) - 1;
+					var rightPos = curr.pos * 2;
+					if (curr.n.left != null) to.Enqueue(new TreeNodePos(leftPos, curr.n.left));
+					if (curr.n.right != null) to.Enqueue(new TreeNodePos(rightPos, curr.n.right));
 				}
 				if (widthStart == -1) return -1;
 				return widthEnd - widthStart + 1;
