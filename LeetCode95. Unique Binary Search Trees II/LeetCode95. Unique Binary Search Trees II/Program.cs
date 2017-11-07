@@ -41,29 +41,23 @@ namespace LeetCode95.Unique_Binary_Search_Trees_II
 
                 for (int i = 0; i < roots.Count; ++i)
                 {
-                    List<int> left = new List<int>();
-                    if (i > 0) left = roots.GetRange(0, i);
-                    List<int> right = new List<int>();
-                    if (i < roots.Count - 1) right = roots.GetRange(i + 1, roots.Count - i - 1);
-                    GenerateTrees(roots[i], left, right, resp);
-                }
+					var left = roots.GetRange(0, i);
+                    var right = roots.GetRange(i + 1, roots.Count - i - 1);
+					var leftTrees = GenerateTrees(left);
+					var rightTrees = GenerateTrees(right);
+					foreach (var leftRoot in leftTrees)
+					{
+						foreach (var rightRoot in rightTrees)
+						{
+							var root = new TreeNode(i);
+							root.left = leftRoot.val == -1 ? null : leftRoot;
+							root.right = rightRoot.val == -1 ? null : rightRoot;
+							resp.Add(root);
+						}
+					}
+				}
 
                 return resp;
-            }
-            private void GenerateTrees(int i, List<int> left, List<int> right, List<TreeNode> resp)
-            {
-                List<TreeNode> leftTrees = GenerateTrees(left);
-                List<TreeNode> rightTrees = GenerateTrees(right);
-                foreach (var leftRoot in leftTrees)
-                {
-                    foreach (var rightRoot in rightTrees)
-                    {
-                        var root = new TreeNode(i);
-                        root.left = leftRoot.val == -1 ? null : leftRoot;
-                        root.right = rightRoot.val == -1 ? null: rightRoot;
-                        resp.Add(root);
-                    }
-                }
             }
         }
     }
