@@ -8,6 +8,7 @@ namespace LeetCode530.MinimumAbsoluteDifferenceinBST
 {
 	class Program
 	{
+		//https://leetcode.com/problems/minimum-absolute-difference-in-bst/description/
 		static void Main(string[] args)
 		{
 		}
