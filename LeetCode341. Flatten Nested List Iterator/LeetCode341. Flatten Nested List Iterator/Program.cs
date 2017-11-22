@@ -27,71 +27,43 @@ namespace LeetCode341.Flatten_Nested_List_Iterator
 			public IList<NestedInteger> GetList() { return new List<NestedInteger>(); }
 		}
 
-		public class NestedCounter
-		{
-			public NestedInteger nestedInt;
-			public int index;
-		}
 		public class NestedIterator
 		{
-			private Stack<NestedCounter> s = new Stack<NestedCounter>();
-			private int indexList = 0;
-			private IList<NestedInteger> nestedList;
+			private Stack<NestedInteger> s = new Stack<NestedInteger>();
 
-			private void AddNext()
+			public NestedIterator(IList<NestedInteger> nestedList)
 			{
-				NestedCounter curr = null;
-				if (s.Count > 0 && s.Peek().index == -1) return;
+				if (nestedList == null) return;
+				for (int i = nestedList.Count - 1; i >= 0; --i)
+				{
+					if(nestedList[i].IsInteger() || nestedList[i].GetList().Count > 0)
+						s.Push(nestedList[i]);
+				}
+				SetNext();
+			}
+
+			private void SetNext()
+			{
 				if (s.Count > 0)
 				{
-					while (s.Count > 0 && !s.Peek().nestedInt.IsInteger() && s.Peek().index == s.Peek().nestedInt.GetList().Count)
+					if (s.Peek().IsInteger()) return;
+					if (s.Peek().GetList().Count == 0)
 					{
 						s.Pop();
+						SetNext();
 					}
 					if (s.Count > 0)
 					{
-						if (s.Peek().nestedInt.IsInteger()) return;
-
-						do
+						if (!s.Peek().IsInteger())
 						{
-							if (s.Count == 0) break;
-							if (s.Peek().index >= s.Peek().nestedInt.GetList().Count)
-							{
-								curr = s.Pop();
-								continue;
-							}
-
-							curr = new NestedCounter() { nestedInt = s.Peek().nestedInt.GetList()[s.Peek().index++] };
-							if (curr.nestedInt.IsInteger())
-							{
-								curr.index = -1;
-							}
-
-							s.Push(curr);
+							var next = s.Peek().GetList().First();
+							s.Peek().GetList().RemoveAt(0);
+							s.Push(next);
+							SetNext();
 						}
-						while (curr.index != -1);
 					}
 				}
-				if (s.Count == 0 && this.indexList < this.nestedList.Count)
-				{
-					curr = new NestedCounter() { nestedInt = nestedList[this.indexList++] };
-					if (curr.nestedInt.IsInteger()) curr.index = -1;
-					s.Push(curr);
-					this.AddNext();
-				}
 			}
-			public NestedIterator(IList<NestedInteger> nestedList)
-			{
-				if (nestedList == null || nestedList.Count == 0)
-				{
-					this.nestedList = new List<NestedInteger>();
-					return;
-				}
-
-				this.nestedList = nestedList;
-				AddNext();
-			}
-
 			public bool HasNext()
 			{
 				return s.Count > 0;
@@ -99,10 +71,14 @@ namespace LeetCode341.Flatten_Nested_List_Iterator
 
 			public int Next()
 			{
-				var ret = s.Peek().nestedInt.GetInteger();
-				s.Pop();
-				AddNext();
-				return ret;
+				if (s.Count > 0)
+				{
+					var ret = s.Peek().GetInteger();
+					s.Pop();
+					this.SetNext();
+					return ret;
+				}
+				return -1;
 			}
 		}
 	}
