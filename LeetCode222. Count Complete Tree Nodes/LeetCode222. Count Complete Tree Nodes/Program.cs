@@ -8,6 +8,8 @@ namespace LeetCode222.Count_Complete_Tree_Nodes
 {
 	class Program
 	{
+		//https://leetcode.com/problems/count-complete-tree-nodes/description/
+		// solution is time exceeding on leetocde, but I'm happy with it.
 		static void Main(string[] args)
 		{
 		}
