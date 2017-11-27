@@ -47,20 +47,20 @@ namespace LeetCode341.Flatten_Nested_List_Iterator
 				if (s.Count > 0)
 				{
 					if (s.Peek().IsInteger()) return;
-					if (s.Peek().GetList().Count == 0)
-					{
-						s.Pop();
-						SetNext();
-					}
 					if (s.Count > 0)
 					{
-						if (!s.Peek().IsInteger())
+						if (s.Peek().IsInteger()) return;
+						if (s.Peek().GetList().Count == 0)
+						{
+							s.Pop();
+						}
+						else
 						{
 							var next = s.Peek().GetList().First();
 							s.Peek().GetList().RemoveAt(0);
 							s.Push(next);
-							SetNext();
 						}
+						this.SetNext();
 					}
 				}
 			}
