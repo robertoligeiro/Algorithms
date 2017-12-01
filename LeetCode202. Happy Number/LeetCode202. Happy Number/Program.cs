@@ -8,6 +8,7 @@ namespace LeetCode202.Happy_Number
 {
 	class Program
 	{
+		//https://leetcode.com/problems/happy-number/description/
 		static void Main(string[] args)
 		{
 			var r = itoa(56142);
