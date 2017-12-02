@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace LeetCode464.Can_I_Win
 {
 	//https://leetcode.com/problems/can-i-win/discuss/
+	//not working
 	class Program
 	{
 		static void Main(string[] args)
