@@ -15,7 +15,41 @@ namespace LeetCode60.PermutationSequence
             var r = s.GetPermutation(8, 20545);
         }
 
-        public class Solution
+		//same as solution1, but with some small optmizations.
+		public class Solution
+		{
+			public string GetPermutation(int n, int k)
+			{
+				var values = Enumerable.Repeat(1, n).ToList();
+				var parc = new List<int>();
+				GetPermutations(values, parc, ref k);
+				return string.Join("", parc);
+			}
+
+			public void GetPermutations(List<int> values, List<int> parc, ref int k)
+			{
+				if (parc.Count == values.Count)
+				{
+					--k;
+					return;
+				}
+
+				for (int i = 0; i < values.Count; ++i)
+				{
+					if (values[i] == 1)
+					{
+						values[i] = 0;
+						parc.Add(i + 1);
+						GetPermutations(values, parc, ref k);
+						if (k == 0) return;
+						values[i] = 1;
+						parc.RemoveAt(parc.Count - 1);
+					}
+				}
+			}
+		}
+
+		public class Solution1
         {
             public string GetPermutation(int n, int k)
             {
