@@ -12,6 +12,8 @@ namespace LeetCode222.Count_Complete_Tree_Nodes
 		// solution is time exceeding on leetocde, but I'm happy with it.
 		static void Main(string[] args)
 		{
+			var s = new Solution();
+			var r = s.CountNodes(new TreeNode(1) { left = new TreeNode(2) });
 		}
 		public class TreeNode
 		{
@@ -25,33 +27,22 @@ namespace LeetCode222.Count_Complete_Tree_Nodes
 			public int CountNodes(TreeNode root)
 			{
 				if (root == null) return 0;
-				var maxH = GetTreeH(root, 0);
-				if (maxH == 0) maxH = 1;
-				var leaves = 0;
-				CountLeaves(root, 0, maxH - 1, ref leaves);
-				return (int)(Math.Pow(2, maxH) - 1) + leaves;
-			}
-
-			private int GetTreeH(TreeNode root, int h)
-			{
-				if (root == null) return h - 1;
-				return GetTreeH(root.left, h + 1);
-			}
-
-			private bool CountLeaves(TreeNode root, int h, int maxH, ref int count)
-			{
-				if (h == maxH)
+				var l = 0;
+				var curr = root;
+				while (curr.left != null)
 				{
-					if (root.left != null || root.right != null)
-					{
-						if (root.left != null) count++;
-						if (root.right != null) count++;
-						return true;
-					}
-					return false;
+					++l;
+					curr = curr.left;
 				}
-				if (!CountLeaves(root.left, h + 1, maxH, ref count)) return false;
-				return CountLeaves(root.right, h + 1, maxH, ref count);
+				var r = 0;
+				while (curr.right != null)
+				{
+					++r;
+					curr = curr.right;
+				}
+				if (l == r) return (int)Math.Pow(2, l-1) + 1;
+				return CountNodes(root.left) +
+						CountNodes(root.right) + 1;
 			}
 		}
 	}
