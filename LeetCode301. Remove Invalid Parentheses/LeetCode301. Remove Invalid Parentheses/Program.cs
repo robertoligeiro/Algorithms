@@ -12,117 +12,60 @@ namespace LeetCode301.Remove_Invalid_Parentheses
         static void Main(string[] args)
         {
             var s = new Solution();
-//            var r = s.RemoveInvalidParentheses("()())()(");
+            var r = s.RemoveInvalidParentheses("()())()(");
 //            var r = s.RemoveInvalidParentheses(")(");
-            var r = s.RemoveInvalidParentheses("((");
+            //var r = s.RemoveInvalidParentheses("((");
         }
         public class Solution
         {
             public IList<string> RemoveInvalidParentheses(string s)
             {
-                var sPar = new Stack<Tuple<char, int>>();
-                for (int i = 0; i < s.Length; ++i)
-                {
-                    if (s[i] == ')')
-                    {
-                        if (sPar.Count > 0 && sPar.Peek().Item1 == '(') sPar.Pop();
-                        else sPar.Push(new Tuple<char, int>(')', i));
-                    }
-                    else if (s[i] == '(')
-                    {
-                        sPar.Push(new Tuple<char, int>('(', i));
-                    }
-                    else continue;
-                }
-                if (sPar.Count == 0) return new List<string>() { s };
+				// count how many left and right par it's needed to remove
+				var removeLeft = 0;
+				var removeRight = 0;
+				foreach (var c in s)
+				{
+					if (c == '(') removeLeft++;
+					else if(c == ')')
+					{
+						if (removeLeft == 0) removeRight++;
+						else removeLeft--;
+					}
+				}
 
-                var remove = new List<HashSet<int>>();
-                foreach(var t in sPar.Reverse())
-                {
-                    if (t.Item1 == ')') RemoveClose(s, t.Item2, remove);
-                    else RemoveOpen(s, t.Item2, remove);
-                }
-                var resp = new List<string>();
-
-                foreach (var h in remove)
-                {
-                    var sb = new StringBuilder();
-                    for (int i = 0; i < s.Length; ++i)
-                    {
-                        if (!h.Contains(i)) sb.Append(s[i]);
-                    }
-                    if(sb.Length % 2 == 0) resp.Add(sb.ToString());
-                }
-                return resp;
+				// dfs to get the removed using a hash to avoid dups
+				var resp = new HashSet<string>();
+				DfsRemovePar(s, 0, removeLeft, removeRight, resp, string.Empty, 0);
+				return resp.ToList();
             }
 
-            private void RemoveClose(string s, int pos, List<HashSet<int>> remove)
-            {
-                int count = 0;
-                for (int i = pos - 1; i >= 0; --i)
-                {
-                    if (s[i] == ')')
-                    {
-                        if (remove.Count == count)
-                        {
-                            remove.Add(new HashSet<int>() { i });
-                            count++;
-                        }
-                        else
-                        {
-                            if (remove[count].Add(i)) count++;
-                        }
-                    }
-                }
-                if (count == 0)
-                {
-                    if (remove.Count == 0)
-                    {
-                        remove.Add(new HashSet<int>() { pos });
-                    }
-                    else
-                    {
-                        foreach (var h in remove)
-                        {
-                            h.Add(pos);
-                        }
-                    }
-                }
-            }
-
-            private void RemoveOpen(string s, int pos, List<HashSet<int>> remove)
-            {
-                int count = 0;
-                for (int i = pos + 1; i < s.Length; ++i)
-                {
-                    if (s[i] == '(')
-                    {
-                        if (remove.Count == count)
-                        {
-                            remove.Add(new HashSet<int>() { i });
-                            count++;
-                        }
-                        else
-                        {
-                            if (remove[count].Add(i)) count++;
-                        }
-                    }
-                }
-                if (count == 0)
-                {
-                    if (remove.Count == 0)
-                    {
-                        remove.Add(new HashSet<int>() { pos });
-                    }
-                    else
-                    {
-                        foreach (var h in remove)
-                        {
-                            h.Add(pos);
-                        }
-                    }
-                }
-            }
-        }
+			public void DfsRemovePar(string s, int index, int removeLeft, int removeRight, HashSet<string> resp, string parc, int isOpen)
+			{
+				if (removeLeft < 0 || removeRight < 0 || isOpen < 0) return;
+				if (index == s.Length)
+				{
+					if (removeLeft == 0 && removeRight == 0 && isOpen == 0)
+					{
+						resp.Add(parc);
+					}
+					return;
+				}
+				if (s[index] == '(')
+				{
+					//add the open par
+					DfsRemovePar(s, index + 1, removeLeft, removeRight, resp, parc + "(", isOpen + 1);
+					//don't add the open par
+					DfsRemovePar(s, index + 1, removeLeft - 1, removeRight, resp, parc, isOpen);
+				}else
+				if (s[index] == ')')
+				{
+					//add the open par
+					DfsRemovePar(s, index + 1, removeLeft, removeRight, resp, parc + ")", isOpen - 1);
+					//don't add the open par
+					DfsRemovePar(s, index + 1, removeLeft, removeRight - 1, resp, parc, isOpen);
+				}else
+					DfsRemovePar(s, index + 1, removeLeft, removeRight, resp, parc + s[index], isOpen);
+			}
+		}
     }
 }
