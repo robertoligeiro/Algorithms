@@ -15,35 +15,27 @@ namespace LeetCode120.Triangle
             var triangle = new List<IList<int>>() { new List<int>() { -1 }, new List<int>() { 3, 2 }, new List<int>() { 1, -2, -1 } };
             var s = new Solution();
             var r = s.MinimumTotal(triangle);
-        }
+		}
 
-        public class Solution
-        {
-            public int MinimumTotal(IList<IList<int>> triangle)
-            {
-                return GetMinPath(triangle, 0, 0, 0, new Dictionary<Tuple<int,int>, int>());
-            }
+		public class Solution
+		{
+			public int MinimumTotal(IList<IList<int>> triangle)
+			{
+				return MinimumTotal(triangle, new Dictionary<Tuple<int, int>, int>(), 0, 0);
+			}
 
-            public int GetMinPath(IList<IList<int>> triangle, int row, int col, int acc, Dictionary<Tuple<int,int>, int> m)
-            {
-                if (row == triangle.Count || col == triangle[row].Count) return 0;
-                var left = new Tuple<int, int>(row + 1, col);
-                var right = new Tuple<int, int>(row + 1, col+1);
-                var leftVal = 0;
-                if (!m.TryGetValue(left, out leftVal))
-                {
-                    leftVal = GetMinPath(triangle, left.Item1, left.Item2, acc, m);
-                }
-                var rightVal = 0;
-                if (!m.TryGetValue(right, out rightVal))
-                {
-                    rightVal = GetMinPath(triangle, right.Item1, right.Item2, acc, m);
-                }
-
-                acc += triangle[row][col] + Math.Min(leftVal, rightVal);
-                m.Add(new Tuple<int, int>(row, col), acc);
-                return acc;
-            }
-        }
+			private int MinimumTotal(IList<IList<int>> triangle, Dictionary<Tuple<int, int>, int> memo, int row, int col)
+			{
+				if (row == triangle.Count - 1) return triangle[row][col];
+				var min = 0;
+				var t = new Tuple<int, int>(row, col);
+				if (memo.TryGetValue(t, out min)) return min;
+				var left = MinimumTotal(triangle, memo, row + 1, col);
+				var right = MinimumTotal(triangle, memo, row + 1, col + 1);
+				min = triangle[row][col] + Math.Min(left,right);
+				memo.Add(t, min);
+				return min;
+			}
+		}
     }
 }
