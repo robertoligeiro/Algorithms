@@ -11,15 +11,86 @@ namespace LeetCode68.TextJustification
         //https://leetcode.com/problems/text-justification/#/description
         static void Main(string[] args)
         {
-            var s = new Solution();
-            var r = s.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "justification." }, 16);
-            r = s.FullJustify(new string[] { "When", "I", "was", "just", "a", "little", "girl", "I", "asked", "my", "mother", "what", "will", "I", "be", "Will", "I", "be", "pretty", "Will", "I", "be", "rich" }, 60);
-            r = s.FullJustify(new string[] { "What", "must", "be", "shall", "be." }, 12);
-            r = s.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "" }, 16);
-            r = s.FullJustify(new string[] { "a" }, 1);
-            r = s.FullJustify(new string[] { "" }, 2);
-            r = s.FullJustify(new string[] { "a", "b", "c", "d", "e"}, 3);
-        }
+			var ss = new SolutionNew();
+			var s = new Solution();
+
+			var r = s.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "justification." }, 16);
+			var rr = ss.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "justification." }, 16);
+
+			r = s.FullJustify(new string[] { "When", "I", "was", "just", "a", "little", "girl", "I", "asked", "my", "mother", "what", "will", "I", "be", "Will", "I", "be", "pretty", "Will", "I", "be", "rich" }, 60);
+			rr = ss.FullJustify(new string[] { "When", "I", "was", "just", "a", "little", "girl", "I", "asked", "my", "mother", "what", "will", "I", "be", "Will", "I", "be", "pretty", "Will", "I", "be", "rich" }, 60);
+
+			r = s.FullJustify(new string[] { "What", "must", "be", "shall", "be." }, 12);
+			rr = ss.FullJustify(new string[] { "What", "must", "be", "shall", "be." }, 12);
+
+			r = s.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "" }, 16);
+			rr = ss.FullJustify(new string[] { "This", "is", "an", "example", "of", "text", "" }, 16);
+
+			r = s.FullJustify(new string[] { "a" }, 1);
+			rr = ss.FullJustify(new string[] { "a" }, 1);
+
+			r = s.FullJustify(new string[] { "" }, 2);
+			rr = ss.FullJustify(new string[] { "" }, 2);
+
+			r = s.FullJustify(new string[] { "a", "b", "c", "d", "e"}, 3);
+			rr = ss.FullJustify(new string[] { "a", "b", "c", "d", "e" }, 3);
+		}
+
+		public class SolutionNew
+		{
+			public IList<string> FullJustify(string[] words, int maxWidth)
+			{
+				var resp = new List<string>();
+				var countLen = words[0].Length;
+				var parc = new List<string>() { words[0] };
+				var countSpaces = 0;
+				for (int i = 1; i < words.Length; ++i)
+				{
+					if (countLen + words[i].Length + 1 <= maxWidth)
+					{
+						parc.Add(words[i]);
+						countLen += words[i].Length + 1;
+						countSpaces++;
+					}
+					else
+					{
+						var justified = GetJustified(parc, countLen, countSpaces, maxWidth);
+						resp.Add(justified);
+						parc = new List<string>() { words[i] };
+						countLen = words[i].Length;
+						countSpaces = 0;
+					}
+				}
+				if (parc.Count > 0) resp.Add(GetJustified(parc, countLen, countSpaces, maxWidth));
+				return resp;
+			}
+
+			private string GetJustified(List<string> parc, int len, int spaces, int max)
+			{
+				var extraSpaces = 0;
+				var sExtraSpaces = string.Empty;
+				if(len < max)
+				{
+					extraSpaces = max - len;
+					if (parc.Count > 1)
+					{
+						var extraSpacesPerWord = extraSpaces / (parc.Count - 1);
+						sExtraSpaces = new string(Enumerable.Repeat(' ', extraSpacesPerWord).ToArray());
+						extraSpaces = extraSpaces % (parc.Count - 1);
+					}
+				}
+				var resp = new StringBuilder();
+				resp.Append(parc[0]);
+				for (int i = 1; i < parc.Count; ++i)
+				{
+					resp.Append(" ");
+					resp.Append(sExtraSpaces);
+					if (extraSpaces-- > 0) resp.Append(" ");
+					resp.Append(parc[i]);
+				}
+				return resp.ToString();
+			}
+		}
         public class Solution
         {
             public IList<string> FullJustify(string[] words, int maxWidth)

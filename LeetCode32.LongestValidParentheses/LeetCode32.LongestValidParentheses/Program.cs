@@ -13,12 +13,50 @@ namespace LeetCode32.LongestValidParentheses
         static void Main(string[] args)
         {
             var s = new Solution();
-            var r = s.LongestValidParentheses(")()())");
-            r = s.LongestValidParentheses("(()");
-            r = s.LongestValidParentheses("()(()");
-            r = s.LongestValidParentheses("())");
-        }
+			var ss = new SolutionNew();
+			var r = s.LongestValidParentheses(")()())");
+			var rr = ss.LongestValidParentheses(")()())");
 
+			r = s.LongestValidParentheses("(()");
+			rr = ss.LongestValidParentheses("(()");
+
+			r = s.LongestValidParentheses("()(()");
+			rr = ss.LongestValidParentheses("()(()");
+
+			r = s.LongestValidParentheses("())");
+			rr = ss.LongestValidParentheses("())");
+		}
+
+		public class SolutionNew
+		{
+			public int LongestValidParentheses(string s)
+			{
+				var st = new Stack<int>();
+				for (int i = 0; i < s.Length; ++i)
+				{
+					if (s[i] == '(') st.Push(i);
+					else
+					{
+						if (st.Count > 0 && s[st.Peek()] == '(') st.Pop();
+						else st.Push(i);
+					}
+				}
+
+				if (st.Count == 0) return s.Length;
+				var start = 0;
+				var end = s.Length;
+				var max = 0;
+				while (st.Count > 0)
+				{
+					start = st.Pop();
+					var dist = end - start - 1;
+					end = start;
+					max = Math.Max(dist, max);
+				}
+
+				return Math.Max(max, end);
+			}
+		}
         public class Solution
         {
             public int LongestValidParentheses(string s)

@@ -13,7 +13,38 @@ namespace LeetCode40.CombinationSumII
         {
             var s = new Solution();
             var r = s.CombinationSum2(new int[] { 10,1,2,7,6,1,5}, 8);
-        }
+
+			var ss = new SolutionNew();
+			var rr = ss.CombinationSum2(new int[] { 10, 1, 2, 7, 6, 1, 5 }, 8);
+		}
+
+		public class SolutionNew
+		{
+			public IList<IList<int>> CombinationSum2(int[] candidates, int target)
+			{
+				candidates = candidates.OrderBy(x => x).ToArray();
+				var parc = new List<int>();
+				var resp = new List<IList<int>>();
+				CombinationSum2(candidates, parc, resp, new HashSet<string>(), string.Empty, 0, target);
+				return resp;
+			}
+			private void CombinationSum2(int[] candidates, List<int> parc, List<IList<int>> resp, HashSet<string> added, string parcS, int i, int target)
+			{
+				if (i >= candidates.Length || target < 0) return;
+				if (target == 0)
+				{
+					if (added.Add(parcS))
+					{
+						resp.Add(new List<int>(parc));
+					}
+					return;
+				}
+				parc.Add(candidates[i]);
+				CombinationSum2(candidates, parc, resp, added, string.Join("", parc), i + 1, target - candidates[i]);
+				parc.RemoveAt(parc.Count - 1);
+				CombinationSum2(candidates, parc, resp, added, string.Join("", parc), i + 1, target);
+			}
+		}
         public class Solution
         {
             public IList<IList<int>> CombinationSum2(int[] candidates, int target)
