@@ -11,10 +11,40 @@ namespace LeetCode214.ShortestPalindrome
         static void Main(string[] args)
         {
             var s = new Solution();
-            //var r = s.ShortestPalindrome("aaaba");
-            var r = s.ShortestPalindrome("aacecaaa"); //aaaaacecaaa, aaacecaaa
-        }
+			var ss = new SolutionNew();
+			var r = s.ShortestPalindrome("aaaba");
+			var rr = ss.ShortestPalindrome("aaaba");
 
+			//var r = s.ShortestPalindrome("aacecaaa"); //aaaaacecaaa, aaacecaaa
+			//var rr = ss.ShortestPalindrome("aacecaaa"); //aaaaacecaaa, aaacecaaa
+		}
+
+		public class SolutionNew
+		{
+			public string ShortestPalindrome(string s)
+			{
+				var resp = new StringBuilder();
+				var indexS = 0;
+				var indexRev = 0;
+				var rev = new string(s.Reverse().ToArray());
+				while (indexRev < s.Length)
+				{
+					if (s[indexS] == rev[indexRev])
+					{
+						resp.Append(rev[indexRev]);
+						indexRev++;
+						indexS++;
+					}
+					else
+					{
+						resp.Append(rev[indexRev]);
+						indexRev++;
+					}
+				}
+				resp.Append(s.Substring(indexS));
+				return resp.ToString();
+			}
+		}
         public class Solution
         {
             public string ShortestPalindrome(string s)
