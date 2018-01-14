@@ -8,8 +8,6 @@ namespace LeetCode62.UniquePaths
 {
     class Program
     {
-        // DP Solution is from here: https://discuss.leetcode.com/topic/15265/0ms-5-lines-dp-solution-in-c-with-explanations/2
-        // BSF solution is mine, time exceeds in leetcode.
         //problem: https://leetcode.com/problems/unique-paths/description/
         static void Main(string[] args)
         {
@@ -17,47 +15,26 @@ namespace LeetCode62.UniquePaths
             var r = s.UniquePaths(23, 12);
         }
 
-        class Solution
-        {
-            public int UniquePaths(int m, int n)
-            {
-                if (m > n) return UniquePaths(n, m);
-                var cur = Enumerable.Repeat(1, m).ToArray();
-                for (int j = 1; j < n; j++)
-                    for (int i = 1; i < m; i++)
-                        cur[i] += cur[i - 1];
-                return cur[m - 1];
-            }
-        }
+		class Solution
+		{
+			public int UniquePaths(int m, int n)
+			{
+				var memo = new int[m,n];
+				return UniquePaths(m, n, 0, 0, memo);
+			}
 
-        public class SolutionBSF
-        {
-            public int UniquePaths(int m, int n)
-            {
-                var start = new Tuple<int, int>(0, 0);
-                var q = new Queue<Tuple<int, int>>();
-                q.Enqueue(start);
-                var visited = new Dictionary<Tuple<int, int>, int>();
-                var resp = 0;
-                while (q.Count > 0)
-                {
-                    var curr = q.Dequeue();
-                    GetNext(curr, q, m, n);
-                    if (curr.Item1 == m - 1 && curr.Item2 == n - 1)
-                    {
-                        resp++;
-                    }
-                }
-                return resp;
-            }
-
-            private void GetNext(Tuple<int, int> curr, Queue<Tuple<int, int>> q, int m, int n)
-            {
-                var right = curr.Item2 + 1;
-                var down = curr.Item1 + 1;
-                if (right < n) q.Enqueue(new Tuple<int, int>(curr.Item1, right));
-                if (down < m) q.Enqueue(new Tuple<int, int>(down, curr.Item2));
-            }
-        }
+			private int UniquePaths(int m, int n, int r, int c, int[,] memo)
+			{
+				if (r == m - 1 && c == n - 1) return 1;
+				if (memo[r, c] != 0) return memo[r, c];
+				var right = 0;
+				var down = 0;
+				if (c + 1 < n) right = UniquePaths(m, n, r, c + 1, memo);
+				if (r + 1 < m) down = UniquePaths(m, n, r + 1, c, memo);
+				var total = right + down;
+				memo[r, c] = total;
+				return total;
+			}
+		}
     }
 }
