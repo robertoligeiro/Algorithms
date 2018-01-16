@@ -42,22 +42,43 @@ namespace LeetCode230.KthSmallestElementinBST
       public TreeNode right;
       public TreeNode(int x) { val = x; }
   }
- 
-        public class Solution
-        {
-            public int KthSmallest(TreeNode root, int k)
-            {
-                return KthSmallest(root, ref k);
-            }
+		public class SolutionOld
+		{
+			public int KthSmallest(TreeNode root, int k)
+			{
+				return KthSmallest(root, ref k);
+			}
 
-            public int KthSmallest(TreeNode root, ref int k)
-            {
-                if (root == null) return -1;
-                var v = KthSmallest(root.left, ref k);
-                if (v != -1) return v;
-                if (--k == 0) return root.val;
-                return KthSmallest(root.right, ref k);
-            }
-        }
+			public int KthSmallest(TreeNode root, ref int k)
+			{
+				if (root == null) return -1;
+				var v = KthSmallest(root.left, ref k);
+				if (v != -1) return v;
+				if (--k == 0) return root.val;
+				return KthSmallest(root.right, ref k);
+			}
+		}
+		public class Solution
+		{
+			public int KthSmallest(TreeNode root, int k)
+			{
+				var val = 0; 
+				KthSmallest(root, ref k, ref val);
+				return val;
+			}
+
+			public bool KthSmallest(TreeNode root, ref int k, ref int val)
+			{
+				if (root == null) return false;
+				if(KthSmallest(root.left, ref k, ref val)) return true;
+				if (--k == 0)
+				{
+					val = root.val;
+					return true;
+				}
+				return KthSmallest(root.right, ref k, ref val);
+			}
+		}
+
     }
 }
