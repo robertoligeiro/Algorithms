@@ -39,7 +39,7 @@ namespace LeetCode103.BinaryTreeZigzagLevelTraversal
 						if (curr.left != null) s2.Push(curr.left);
 						if (curr.right != null) s2.Push(curr.right);
 					}
-					if (l.Count > 0) resp.Add(new List<int>(l));
+					if (l.Count > 0) resp.Add(l);
 					l = new List<int>();
 					while(s2.Count > 0)
 					{
@@ -48,7 +48,7 @@ namespace LeetCode103.BinaryTreeZigzagLevelTraversal
 						if (curr.right != null) s1.Push(curr.right);
 						if (curr.left != null) s1.Push(curr.left);
 					}
-					if (l.Count > 0) resp.Add(new List<int>(l));
+					if (l.Count > 0) resp.Add(l);
 				}
 				return resp;
 			}
