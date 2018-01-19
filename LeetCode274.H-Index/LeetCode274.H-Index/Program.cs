@@ -16,22 +16,19 @@ namespace LeetCode274.H_Index
             var r = s.HIndex(new int[] { 3,3,3,0,1,5 });
         }
 
-        public class Solution
-        {
-            public int HIndex(int[] citations)
-            {
-                var cit = new List<int>(citations);
-                cit.Sort();
-                //cit.Reverse();
-                int result = 0;
-                for (int i = 0; i < cit.Count; i++)
-                {
-                    int smaller = Math.Min(cit[i], cit.Count - i);
-                    result = Math.Max(result, smaller);
-                }
-
-                return result;
-            }
-        }
+		public class Solution
+		{
+			public int HIndex(int[] citations)
+			{
+				var result = 0;
+				citations = citations.OrderBy(x => x).ToArray();
+				for (int i = 0; i < citations.Length; ++i)
+				{
+					var minH = Math.Min(citations[i], citations.Length - i);
+					result = Math.Max(result, minH);
+				}
+				return result;
+			}
+		}
     }
 }
