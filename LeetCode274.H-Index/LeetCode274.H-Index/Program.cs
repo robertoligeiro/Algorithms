@@ -8,7 +8,8 @@ namespace LeetCode274.H_Index
 {
     class Program
     {
-        static void Main(string[] args)
+		//https://leetcode.com/problems/h-index/description/
+		static void Main(string[] args)
         {
             var s = new Solution();
             //var r = s.HIndex(new int[] { 3,0,6,1,5});
