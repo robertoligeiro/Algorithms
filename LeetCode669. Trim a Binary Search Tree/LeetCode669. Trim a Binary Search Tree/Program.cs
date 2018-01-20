@@ -23,7 +23,7 @@ namespace LeetCode669.Trim_a_Binary_Search_Tree
 			public TreeNode right;
 			public TreeNode(int x) { val = x; }
 		}
-		public class Solution
+		public class SolutionOld
 		{
 			public TreeNode TrimBST(TreeNode root, int L, int R)
 			{
@@ -37,6 +37,22 @@ namespace LeetCode669.Trim_a_Binary_Search_Tree
 					return root.left != null ? root.left : root.right;
 				}
 				return root;
+			}
+		}
+
+		public class Solution
+		{
+			public TreeNode TrimBST(TreeNode root, int L, int R)
+			{
+				if (root == null) return null;
+				if (root.val >= L && root.val <= R)
+				{
+					root.left = TrimBST(root.left, L, R);
+					root.right = TrimBST(root.right, L, R);
+					return root;
+				}
+				if (root.val < L) return TrimBST(root.right, L, R);
+				return TrimBST(root.left, L, R);
 			}
 		}
 		private static TreeNode BuildTree(List<int> values, int l, int r)
