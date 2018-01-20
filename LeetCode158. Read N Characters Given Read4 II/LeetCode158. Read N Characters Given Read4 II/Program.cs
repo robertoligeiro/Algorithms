@@ -42,22 +42,31 @@ namespace LeetCode158.Read_N_Characters_Given_Read4_II
 				var index = 0;
 				while (n > 0)
 				{
-					if (this.charsAvailable > 0)
+					char c = ' ';
+					if (this.ReadNext(ref c))
 					{
-						buf[index++] = this.read4Buffer[nextAvailable++];
-						--n;
-						--this.charsAvailable;
-					}else
-					if (this.charsAvailable == 0)
-					{
-						this.ReadFromRead4();
+						buf[index++] = c;
+						n--;
 					}
 					else break;
 				}
 				return index;
 			}
 
-			private void ReadFromRead4()
+			private bool ReadNext(ref char c)
+			{
+				if (this.nextAvailable < this.charsAvailable)
+				{
+					c = this.read4Buffer[this.nextAvailable++];
+					return true;
+				}
+				else
+				{
+					if (this.ReadFromRead4() > 0) return ReadNext(ref c);
+				}
+				return false;
+			}
+			private int ReadFromRead4()
 			{
 				var ret = this.Read4(this.read4Buffer);
 				if (ret == 0) this.charsAvailable = -1;
@@ -65,7 +74,8 @@ namespace LeetCode158.Read_N_Characters_Given_Read4_II
 				{
 					this.nextAvailable = 0;
 					this.charsAvailable = ret;
-				} 
+				}
+				return ret;
 			}
 		}
 	}
