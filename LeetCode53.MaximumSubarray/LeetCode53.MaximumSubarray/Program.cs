@@ -19,25 +19,18 @@ namespace LeetCode53.MaximumSubarray
 
         public class Solution
         {
-            public int MaxSubArray(int[] nums)
-            {
-                var maxSofar = int.MinValue;
-                var localMax = 0;
-                foreach (var i in nums)
-                {
-                    var sum = i + localMax;
-                    if (sum > 0)
-                    {
-                        localMax = sum;
-                    }
-                    else
-                    {
-                        localMax = 0;
-                    }
-                    maxSofar = Math.Max(sum, maxSofar);
-                }
-                return maxSofar;
-            }
-        }
+			public int MaxSubArray(int[] nums)
+			{
+				var maxSofar = int.MinValue;
+				var localMax = 0;
+				foreach (var i in nums)
+				{
+					localMax += i;
+					maxSofar = Math.Max(maxSofar, localMax);
+					localMax = Math.Max(localMax, 0);
+				}
+				return maxSofar;
+			}
+		}
     }
 }
