@@ -15,39 +15,45 @@ namespace LeetCode451.Sort_Characters_By_Frequency
             var r = s.FrequencySort("    tree");
         }
 
-        //no sorting.
-        public class Solution
+		//no sorting, using buckets.
+		public class Solution
+		{
+			public string FrequencySort(string s)
+			{
+				var map = new Dictionary<char, int>();
+				foreach (var c in s)
+				{
+					var count = 0;
+					if (map.TryGetValue(c, out count))
+					{
+						map[c] = ++count;
+					}
+					else map.Add(c, 1);
+				}
+
+				// each freq size will be concateneted here,
+				// non existent freqs will be empty, that's fine
+				// this will prevent having to sort
+				var stringSizeBuckets = new string[s.Length + 1];
+
+				foreach (var t in map)
+				{
+					stringSizeBuckets[t.Value] += new string(Enumerable.Repeat(t.Key, t.Value).ToArray());
+				}
+
+				var resp = new StringBuilder();
+				for (int i = stringSizeBuckets.Length - 1; i >= 0; --i)
+				{
+					if (!string.IsNullOrWhiteSpace(stringSizeBuckets[i]))
+					{
+						resp.Append(stringSizeBuckets[i]);
+					}
+				}
+				return resp.ToString();
+			}
+		}
+		public class SolutionOld
         {
-            public string FrequencySort(string s)
-            {
-                var h = new Dictionary<char, int>();
-                foreach (var c in s)
-                {
-                    var count = 0;
-                    if (h.TryGetValue(c, out count))
-                    {
-                        h[c] = ++count;
-                    }
-                    else h.Add(c, 1);
-                }
-
-                var freqBucket = new string[s.Length + 1];
-                foreach (var kvp in h)
-                {
-                    freqBucket[kvp.Value] += new string(Enumerable.Repeat(kvp.Key, kvp.Value).ToArray());
-                }
-
-                var resp = new StringBuilder();
-                for (int i = freqBucket.Length - 1; i >= 0; --i)
-                {
-                    if (!string.IsNullOrEmpty(freqBucket[i]))
-                    {
-                        resp.Append(freqBucket[i]);
-                    }
-                }
-                return resp.ToString();
-            }
-        }
 
         //with sorting. 
         //leetcode accepts both.
