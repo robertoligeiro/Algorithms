@@ -11,6 +11,8 @@ namespace LeetCode238.Product_of_Array_Except_Self
 		//https://leetcode.com/problems/product-of-array-except-self/description/
 		static void Main(string[] args)
 		{
+			var s = new Solution();
+			var r = s.ProductExceptSelf(new int[] { 1,2,3,4});
 		}
 		public class Solution
 		{
