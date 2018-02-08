@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LeetCode161. One Edit Distance", "LeetCode161. One Edit Distance\LeetCode161. One Edit Distance.csproj", "{1B3845E7-DC6A-4D9C-8F4F-A45C219FE344}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B3845E7-DC6A-4D9C-8F4F-A45C219FE344}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B3845E7-DC6A-4D9C-8F4F-A45C219FE344}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B3845E7-DC6A-4D9C-8F4F-A45C219FE344}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B3845E7-DC6A-4D9C-8F4F-A45C219FE344}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
