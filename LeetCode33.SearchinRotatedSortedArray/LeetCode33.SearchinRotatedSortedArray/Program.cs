@@ -26,37 +26,40 @@ namespace LeetCode33.SearchinRotatedSortedArray
 
         public class Solution
         {
-            public int Search(int[] nums, int target)
-            {
-                return Search(nums, target, 0, nums.Length - 1);
-            }
-            private int Search(int[] nums, int target, int l, int r)
-            {
-                if (l > r) return -1;
-                while (l <= r)
-                {
-                    var mid = l + (r - l) / 2;
-                    if (nums[mid] == target) return mid;
-                    if (nums[mid] < nums[r])
-                    {
-                        if (nums[mid] < target && nums[r] >= target)
-                        {
-                            l = mid + 1;
-                        }
-                        else
-                        {
-                            r = mid - 1;
-                        }
-                    }
-                    else
-                    {
-                        var ret = Search(nums, target, l, mid - 1);
-                        if (ret != -1) return ret;
-                        return Search(nums, target, mid + 1, r);
-                    }
-                }
-                return -1;
-            }
-        }
+			public int Search(int[] nums, int target)
+			{
+				return Search(nums, target, 0, nums.Length - 1);
+			}
+			private int Search(int[] nums, int target, int l, int r)
+			{
+				if (l > r) return -1;
+				while (l <= r)
+				{
+					var mid = l + (r - l) / 2;
+					if (nums[mid] == target) return mid;
+					if (nums[mid] < nums[r])
+					{
+						if (nums[mid] > target || nums[r] < target)
+						{
+							r = mid - 1;
+						}
+						else
+						{
+							l = mid + 1;
+						}
+					}
+					else
+					{
+						// this solution also works, but worst case is O(n).
+						//var ret = Search(nums, target, l, mid - 1);
+						//if (ret != -1) return ret;
+						//return Search(nums, target, mid + 1, r);
+						if ((nums[mid] > target && nums[r] >= target) || (nums[mid] < target && nums[l] < target)) l = mid + 1;
+						else r = mid - 1;
+					}
+				}
+				return -1;
+			}
+		}
     }
 }
