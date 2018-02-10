@@ -20,63 +20,19 @@ namespace LeetCode209.Minimum_Size_Subarray_Sum
 			public int MinSubArrayLen(int s, int[] nums)
 			{
 				if (nums.Length == 0) return 0;
-				var sums = new List<int>();
-				sums.Add(0);
-				var min = int.MaxValue;
-				for (int i = 1; i <= nums.Length; ++i)
+				int i = 0, j = 0, sum = 0, min = int.MaxValue;
+
+				while (j < nums.Length)
 				{
-					sums.Add(sums[i - 1] + nums[i-1]);
-				}
-				for (int i = 1; i < sums.Count; ++i)
-				{
-					var j = BinSearch(sums, s + sums[i-1], 0, sums.Count - 1);
-					if(j != -1)
-						min = Math.Min(min, j - i + 1);
+					sum += nums[j++];
+
+					while (sum >= s)
+					{
+						min = Math.Min(min, j - i);
+						sum -= nums[i++];
+					}
 				}
 				return min == int.MaxValue ? 0 : min;
-			}
-
-			private int BinSearch(List<int> sums, int tgt, int l, int r)
-			{
-				while (l < r)
-				{
-					var mid = l + (r - l) / 2;
-					if (sums[mid] < tgt)
-					{
-						l = mid + 1;
-					}
-					else
-					{
-						r = mid;
-					}
-				}
-				return sums[l] >= tgt ? l : -1;
-			}
-		}
-		public class Solution2
-		{
-			public int MinSubArrayLen(int s, int[] nums)
-			{
-				if (nums.Length == 0) return 0;
-				var sums = new List<int>();
-				sums.Add(nums[0]);
-				var min = int.MaxValue;
-				for (int i = 1; i < nums.Length; ++i)
-				{
-					sums.Add(sums[i - 1] + nums[i]);
-				}
-				for (int i = 0; i < sums.Count; ++i)
-				{
-					for (int j = i; j < sums.Count; ++j)
-					{
-						var sum = sums[j] - sums[i] + nums[i];
-						if (sum >= s)
-						{
-							min = Math.Min(min, j - i + 1);
-						}
-					}
-				}
-				return min == int.MaxValue?0:min;
 			}
 		}
 	}
