@@ -20,17 +20,22 @@ namespace LeetCode494.Target_Sum
         {
             public int FindTargetSumWays(int[] nums, int S)
             {
-                return FindTargetSumWays(nums, S, 0, 0);
+				var memo = new Dictionary<string, int>();
+                return FindTargetSumWays(nums, S, 0, 0, memo);
             }
 
-            private int FindTargetSumWays(int[] nums, int tgt, int index, int acc)
+            private int FindTargetSumWays(int[] nums, int tgt, int index, int acc, Dictionary<string, int> memo)
             {
+				var encoding = index + "->" + acc;
+				var ways = 0;
+				if (memo.TryGetValue(encoding, out ways)) return ways; 
                 if (index == nums.Length)
                 {
                     return acc == tgt ? 1 : 0;
                 }
-                var ways = FindTargetSumWays(nums, tgt, index + 1, acc + nums[index]);
-                ways += FindTargetSumWays(nums, tgt, index + 1, acc - nums[index]);
+                ways = FindTargetSumWays(nums, tgt, index + 1, acc + nums[index], memo);
+                ways += FindTargetSumWays(nums, tgt, index + 1, acc - nums[index], memo);
+				memo.Add(encoding, ways);
                 return ways;
             }
         }
