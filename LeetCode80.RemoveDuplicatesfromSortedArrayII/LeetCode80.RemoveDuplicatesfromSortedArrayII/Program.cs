@@ -21,24 +21,42 @@ namespace LeetCode80.RemoveDuplicatesfromSortedArrayII
 			{
 				if (nums.Length == 0) return 0;
 				var nextWrite = 1;
-				var isSame = false;
-				var prev = nums[0];
+				var count = 1;
 				for (int i = 1; i < nums.Length; ++i)
 				{
-					if (nums[i] != prev)
+					if (nums[i] != nums[i-1] || count++<2)
 					{
+						if (nums[i] != nums[i - 1]) count = 1;
 						nums[nextWrite++] = nums[i];
-						isSame = false;
 					}
-					else if (nums[i] == prev && !isSame)
-					{
-						nums[nextWrite++] = nums[i];
-						isSame = true;
-					}
-					prev = nums[i];
 				}
 				return nextWrite;
 			}
 		}
+		//public class Solution
+		//{
+		//	public int RemoveDuplicates(int[] nums)
+		//	{
+		//		if (nums.Length == 0) return 0;
+		//		var nextWrite = 1;
+		//		var isSame = false;
+		//		var prev = nums[0];
+		//		for (int i = 1; i < nums.Length; ++i)
+		//		{
+		//			if (nums[i] != prev)
+		//			{
+		//				nums[nextWrite++] = nums[i];
+		//				isSame = false;
+		//			}
+		//			else if (nums[i] == prev && !isSame)
+		//			{
+		//				nums[nextWrite++] = nums[i];
+		//				isSame = true;
+		//			}
+		//			prev = nums[i];
+		//		}
+		//		return nextWrite;
+		//	}
+		//}
 	}
 }
