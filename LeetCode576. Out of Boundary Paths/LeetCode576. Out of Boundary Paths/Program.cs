@@ -21,17 +21,23 @@ namespace LeetCode576.Out_of_Boundary_Paths
         {
             public int FindPaths(int m, int n, int N, int i, int j)
             {
-                if (i == m || j == n || i < 0 || j < 0) return 1;
-                if (N == 0) return 0;
-                var curr = new Tuple<int, int>(i,j);
-                var count = 0;
-                count = FindPaths(m, n, N-1, i + 1, j) + 
-                        FindPaths(m, n, N-1, i - 1, j) + 
-                        FindPaths(m, n, N-1, i, j + 1) + 
-                        FindPaths(m, n, N - 1, i, j - 1);
-
-                return count;
+				return FindPaths(m, n, N, i, j, new Dictionary<Tuple<Tuple<int, int>, int>, int>());
             }
-        }
-    }
+
+			public int FindPaths(int m, int n, int N, int i, int j, Dictionary<Tuple<Tuple<int, int>, int>, int> memo)
+            {
+                if (i == m || j == n || i< 0 || j< 0) return 1;
+                if (N == 0) return 0;
+                var curr = new Tuple<Tuple<int,int>, int>(new Tuple<int, int>(i,j), N);
+				var count = 0;
+				if (memo.TryGetValue(curr, out count)) return count;
+				count = FindPaths(m, n, N-1, i + 1, j) + 
+							FindPaths(m, n, N-1, i - 1, j) + 
+							FindPaths(m, n, N-1, i, j + 1) + 
+							FindPaths(m, n, N - 1, i, j - 1);
+				memo.Add(curr, count);
+				return count;
+            }
+		}
+	}
 }
