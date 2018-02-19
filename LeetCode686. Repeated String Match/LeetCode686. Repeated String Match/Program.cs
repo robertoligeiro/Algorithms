@@ -8,6 +8,7 @@ namespace LeetCode686.Repeated_String_Match
 {
 	class Program
 	{
+		//https://leetcode.com/problems/repeated-string-match/description/
 		static void Main(string[] args)
 		{
 		}
