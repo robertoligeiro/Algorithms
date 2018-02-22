@@ -54,7 +54,7 @@ namespace LeetCode33.SearchinRotatedSortedArray
 						//var ret = Search(nums, target, l, mid - 1);
 						//if (ret != -1) return ret;
 						//return Search(nums, target, mid + 1, r);
-						if ((nums[mid] > target && nums[r] >= target) || (nums[mid] < target && nums[l] < target)) l = mid + 1;
+						if (target > nums[r] && target < nums[mid]) r = mid - 1;
 						else r = mid - 1;
 					}
 				}
