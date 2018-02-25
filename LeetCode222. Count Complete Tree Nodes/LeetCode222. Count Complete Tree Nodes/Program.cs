@@ -28,19 +28,20 @@ namespace LeetCode222.Count_Complete_Tree_Nodes
 			{
 				if (root == null) return 0;
 				var l = 0;
-				var curr = root;
-				while (curr.left != null)
+				var left = root;
+				while (left != null)
 				{
 					++l;
-					curr = curr.left;
+					left = left.left;
 				}
 				var r = 0;
-				while (curr.right != null)
+				var right = root;
+				while (right != null)
 				{
 					++r;
-					curr = curr.right;
+					right = right.right;
 				}
-				if (l == r) return (int)Math.Pow(2, l-1) + 1;
+				if (l == r) return (int)Math.Pow(2, l) - 1;
 				return CountNodes(root.left) +
 						CountNodes(root.right) + 1;
 			}
