@@ -30,6 +30,10 @@ namespace VideoEncoderEventHandlerSample
 		{
 			VideoEncoderEventHandler += v;
 		}
+		public void UnregisterConsumer(EventHandler<VideoArgs> v)
+		{
+			VideoEncoderEventHandler -= v;
+		}
 		protected virtual void OnEncoded(VideoArgs v)
 		{
 			VideoEncoderEventHandler(this, v);

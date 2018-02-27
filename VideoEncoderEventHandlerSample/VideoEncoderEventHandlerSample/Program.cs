@@ -15,6 +15,7 @@ namespace VideoEncoderEventHandlerSample
 			var sms = new SmsNotify();
 			videoEncoder.RegisterConsumer(email.EmailNotifyHander);
 			videoEncoder.RegisterConsumer(sms.SmsNotifyHander);
+			videoEncoder.UnregisterConsumer(sms.SmsNotifyHander);
 			videoEncoder.Encode();
 			Console.ReadKey();
 		}
