@@ -11,6 +11,14 @@ namespace LeetCode200.NumberofIslands
         //https://leetcode.com/problems/number-of-islands/tabs/description
         static void Main(string[] args)
         {
+			var g = new char[,] { 
+				{ '1', '1', '0', '0', '0'},
+				{ '1', '1', '0', '0', '0'},
+				{ '0', '0', '1', '0', '0'},
+				{ '0', '0', '0', '1', '1'},
+			};
+			var s = new Solution();
+			var r = s.NumIslands(g);
         }
         public class Solution
         {
@@ -33,44 +41,34 @@ namespace LeetCode200.NumberofIslands
 
             private void GetIsland(int row, int col, char[,] grid)
             {
+				var maxR = grid.GetLength(0) - 1;
+				var maxC = grid.GetLength(1) - 1;
                 var start = new Tuple<int, int>(row, col);
-                var visited = new HashSet<Tuple<int, int>>() { start};
                 var q = new Queue<Tuple<int, int>>();
                 q.Enqueue(start);
                 while (q.Count > 0)
                 {
                     var curr = q.Dequeue();
-                    grid[curr.Item1, curr.Item2] = '2';
-                    GetAdj(grid, curr, visited, q);
-                }
+					if (grid[curr.Item1, curr.Item2] == '1')
+					{
+						grid[curr.Item1, curr.Item2] = '2';
+						GetAdj(grid, curr, maxR, maxC, q);
+					}
+				}
             }
-            private void GetAdj(char[,] grid, Tuple<int,int> curr, HashSet<Tuple<int, int>> visited, Queue<Tuple<int, int>> q)
+			private readonly int[,] directions = new int[,] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
+            private void GetAdj(char[,] grid, Tuple<int,int> curr, int maxR, int maxC, Queue<Tuple<int, int>> q)
             {
-                var down = curr.Item1 + 1;
-                var up = curr.Item1 - 1;
-                var left = curr.Item2 - 1;
-                var right = curr.Item2 + 1;
-                if (down < grid.GetLength(0) && grid[down, curr.Item2] == '1')
-                {
-                    AddAdj(new Tuple<int, int>(down, curr.Item2), visited, q);
-                }
-                if (up >=0 && grid[up, curr.Item2] == '1')
-                {
-                    AddAdj(new Tuple<int, int>(up, curr.Item2), visited, q);
-                }
-                if (right < grid.GetLength(1) && grid[curr.Item1, right] == '1')
-                {
-                    AddAdj(new Tuple<int, int>(curr.Item1, right), visited, q);
-                }
-                if (left >= 0 && grid[curr.Item1, left] == '1')
-                {
-                    AddAdj(new Tuple<int, int>(curr.Item1, left), visited, q);
-                }
-            }
-            private void AddAdj(Tuple<int, int> candidate, HashSet<Tuple<int, int>> visited, Queue<Tuple<int, int>> q)
-            {
-                if (visited.Add(candidate)) q.Enqueue(candidate);
-            }
+				for (int i = 0; i < directions.GetLength(0); ++i)
+				{
+					var r = curr.Item1 + directions[i, 0];
+					var c = curr.Item2 + directions[i, 1];
+					if (r >= 0 && r <= maxR && c >= 0 && c <= maxC)
+					{
+						q.Enqueue(new Tuple<int, int>(r, c));
+					}
+				}
+			}
         }
     }
 }
