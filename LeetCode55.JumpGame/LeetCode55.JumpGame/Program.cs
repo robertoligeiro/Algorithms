@@ -20,19 +20,12 @@ namespace LeetCode55.JumpGame
         {
             public bool CanJump(int[] nums)
             {
-                return CanJump(nums, 0);
-            }
-            public bool CanJump(int[] nums, int start)
-            {
-                if (start == nums.Length - 1) return true;
-                if (start >= nums.Length) return false;
-                var i = nums[start];
-                while (i > 0)
-                {
-                    if (CanJump(nums, start + i)) return true;
-                    --i;
-                }
-                return false;
+				var maxReach = nums.Length - 1;
+				for (int i = nums.Length - 1; i >= 0; --i)
+				{
+					if (nums[i] + i >= maxReach) maxReach = i;
+				}
+				return maxReach == 0;
             }
         }
     }
