@@ -20,16 +20,16 @@ namespace BstInsertAndDelete
             Insert(root, 6);
             Insert(root, 7);
 
-            root = Delete(root, 1);
+			root = Delete(root, 5);
+			root = Delete(root, 10);
+			root = Delete(root, 1);
             root = Delete(root, 3);
             root = Delete(root, 4);
-            root = Delete(root, 10);
             root = Delete(root, 10);
             root = Delete(root, 8);
             root = Delete(root, 11);
             root = Delete(root, 6);
             root = Delete(root, 7);
-            root = Delete(root, 5);
         }
 
         public class TreeNode
@@ -55,41 +55,33 @@ namespace BstInsertAndDelete
         public static TreeNode Delete(TreeNode r, int val)
         {
             if (r == null) return null;
-            if (r.val == val)
-            {
-                //leaf
-                if (r.left == null && r.right == null) return null;
-                //one child
-                if (r.left != null && r.right == null)
-                {
-                    var tleft = r.left;
-                    r.left = null;
-                    return tleft;
-                }
-                if (r.left == null && r.right != null)
-                {
-                    var tright = r.right;
-                    r.right = null;
-                    return tright;
-                }
-                //both
-                var leftMostRight = r.right;
-                while (leftMostRight.left != null) leftMostRight = leftMostRight.left;
-                leftMostRight.left = r.left;
-                r.left = null;
-                var tr = r.right;
-                r.right = null;
-                return tr;
-            }
-            if (r.val > val)
-            {
-                r.left = Delete(r.left, val);
-            }
-            else
-            {
-                r.right = Delete(r.right, val);
-            }
-            return r;
+			if (r.val > val)
+			{
+				r.left = Delete(r.left, val);
+				return r;
+			}
+			if(r.val < val)
+			{
+				r.right = Delete(r.right, val);
+				return r;
+			}
+
+            //leaf
+            if (r.left == null && r.right == null) return null;
+			
+			//one child
+			if (r.left == null || r.right == null)
+			{
+				return r.left == null ? r.right : r.left;
+			}
+
+            //both
+            var leftMostRight = r.right;
+            while (leftMostRight.left != null) leftMostRight = leftMostRight.left;
+			var newVal = leftMostRight.val;
+			Delete(r, newVal);
+			r.val = newVal;
+			return r;
         }
     }
 }
