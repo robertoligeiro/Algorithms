@@ -8,8 +8,11 @@ namespace LeetCode172.Factorial_Trailing_Zeroes
 {
 	class Program
 	{
+		//https://leetcode.com/problems/factorial-trailing-zeroes/description/
 		static void Main(string[] args)
 		{
+			var s = new Solution();
+			var r = s.TrailingZeroes(100);
 		}
 
 		public class Solution
