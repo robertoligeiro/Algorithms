@@ -44,37 +44,27 @@ namespace LeetCode166.FractiontoRecurringDecimal
 
                 long rem = numeratorN % denominatorN;
                 long num = numeratorN / denominatorN;
-                integral.Append(num.ToString()+".");
+                integral.Append(num.ToString());
                 if (rem == 0) return integral.ToString();
 
-                num = num > 0 ? num * 10 : rem * 10;
+				integral.Append(".");
                 var m = new Dictionary<long, int>();
-                var dec = new List<long>();
-                var index = 0;
-                var hasPeriodic = false;
-                while (num > 0)
+                while (rem > 0)
                 {
-                    var d = num / denominatorN;
-                    rem = num % denominatorN;
-                    if (!m.TryGetValue(d, out index))
-                    {
-                        m.Add(d, dec.Count);
-                        dec.Add(d);
-                    }
-                    else
-                    {
-                        hasPeriodic = true;
-                        break;
-                    }
-                    num = rem * 10;
-                }
-                if (!hasPeriodic) integral.Append(string.Join("", dec));
-                else
-                {
-                    if(index > 0) integral.Append(string.Join("", dec.GetRange(0, index)));
-                    integral.Append("(");
-                    integral.Append(string.Join("", dec.GetRange(index, dec.Count - index)));
-                    integral.Append(")");
+					var index = 0;
+					if (m.TryGetValue(rem, out index))
+					{
+						integral.Insert(index, "(");
+						integral.Append(")");
+						break;
+					}
+					else
+					{
+						m.Add(rem, integral.Length);
+						rem *= 10;
+						integral.Append(rem/denominatorN);
+						rem = rem % denominatorN;
+					}
                 }
                 return integral.ToString();
             }
