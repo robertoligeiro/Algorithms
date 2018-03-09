@@ -12,7 +12,7 @@ namespace LeetCode289.GameofLife
         static void Main(string[] args)
         {
             var s = new Solution();
-            var b = new int[,] { { 1, 1 }, { 1, 0 } };
+            var b = new int[,] { { 1, 1 }, { 1, 1 } };
             s.GameOfLife(b);
         }
         public class Solution
@@ -48,22 +48,24 @@ namespace LeetCode289.GameofLife
             }
             public int GetCountNeighbors(int[,] board, int row, int col, int neighbor)
             {
-                var rowPlusOne = row + 1;
-                var rowMinusOne = row - 1;
-                var colPlusOne = col + 1;
-                var colMinusOne = col - 1;
-                var countNeighbors = 0;
+				var countNeighbors = 0;
+				for (int i = -1; i <= 1; ++i)
+				{
+					for (int j = -1; j <= 1; ++j)
+					{
+						if (i == 0 && j == 0) continue;
+						var r = row + i;
+						var c = col + j;
+						if (r >= 0 && r < board.GetLength(0) &&
+							c >= 0 && c < board.GetLength(1) &&
+							board[r, c] == neighbor)
+						{
+							countNeighbors++;
+						}
+					}
+				}
 
-                if (board.GetLength(0) > rowPlusOne && board[rowPlusOne, col] == neighbor) countNeighbors++;
-                if (rowMinusOne >= 0 && board[rowMinusOne, col] == neighbor) countNeighbors++;
-                if (board.GetLength(1) > colPlusOne && board[row, colPlusOne] == neighbor) countNeighbors++;
-                if (colMinusOne >= 0 && board[row, colMinusOne] == neighbor) countNeighbors++;
-                if (colMinusOne >= 0 && rowMinusOne >= 0 && board[rowMinusOne, colMinusOne] == neighbor) countNeighbors++;
-                if (board.GetLength(1) > colPlusOne && rowMinusOne >= 0 && board[rowMinusOne, colPlusOne] == neighbor) countNeighbors++;
-                if (board.GetLength(0) > rowPlusOne && board.GetLength(1) > colPlusOne && board[rowPlusOne, colPlusOne] == neighbor) countNeighbors++;
-                if (board.GetLength(0) > rowPlusOne && colMinusOne >= 0 && board[rowPlusOne, colMinusOne] == neighbor) countNeighbors++;
-
-                return countNeighbors;
+				return countNeighbors;
             }
         }
 
