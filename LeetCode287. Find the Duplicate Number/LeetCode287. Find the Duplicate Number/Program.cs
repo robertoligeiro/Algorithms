@@ -11,7 +11,8 @@ namespace LeetCode287.Find_the_Duplicate_Number
 		static void Main(string[] args)
 		{
 			var s = new Solution();
-			var r = s.FindDuplicate(new int[] { 2,2,2});
+			//var r = s.FindDuplicate(new int[] { 2,2,2});
+			var r = s.FindDuplicate(new int[] { 1, 3, 4, 2, 2 });
 		}
 
 		public class Solution
