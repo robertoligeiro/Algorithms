@@ -35,7 +35,7 @@ namespace LeetCode239.Sliding_Window_Maximum
 				var resp = new List<int>() { deque.First() };
 				for (int i = k; i < nums.Length; ++i)
 				{
-					if (deque.Count >= k || deque.First() == nums[i-k]) deque.RemoveFirst();
+					if (deque.First() == nums[i-k]) deque.RemoveFirst();
 					AddToDeque(nums[i]);
 					resp.Add(deque.First());
 				}
