@@ -19,71 +19,43 @@ namespace LeetCode227.Basic_Calculator_II
 		{
 			public int Calculate(string s)
 			{
-				s = s.Replace(" ", string.Empty);
-				int m = 0;
-				int d = 0;
-				while ((m = s.IndexOf('*')) > 0 || (d = s.IndexOf('/')) > 0)
+				var result = 0;
+				var parcResults = new Stack<int>();
+				var parcNum = 0;
+				var sign = '+';
+				for (int i = 0; i < s.Length; ++i)
 				{
-					s = DoMultOrDiv(s);
-				}
-
-				var qNum = new Queue<int>();
-				var qOp = new Queue<char>();
-				var num = string.Empty;
-				foreach (var c in s)
-				{
-					if (char.IsDigit(c))
+					if (char.IsDigit(s[i]))
 					{
-						num += c;
+						parcNum = parcNum * 10 + s[i] - '0';
 					}
-					else
+					if((!char.IsDigit(s[i]) && s[i] != ' ') || i == s.Length-1)
 					{
-						qNum.Enqueue(int.Parse(num));
-						qOp.Enqueue(c);
-						num = string.Empty;
+						if (sign == '+')
+						{
+							parcResults.Push(parcNum);
+						}
+						else if (sign == '-')
+						{
+							parcResults.Push(-parcNum);
+						}
+						else if (sign == '*')
+						{
+							parcResults.Push(parcResults.Pop()*parcNum);
+						}
+						else if (sign == '/')
+						{
+							parcResults.Push(parcResults.Pop() / parcNum);
+						}
+						sign = s[i];
+						parcNum = 0;
 					}
 				}
-				qNum.Enqueue(int.Parse(num));
-
-				var result = qNum.Dequeue();
-				while (qNum.Count > 0)
+				while (parcResults.Count > 0)
 				{
-					result = qOp.Dequeue() == '+' ? result + qNum.Dequeue() : result - qNum.Dequeue();
+					result += parcResults.Pop();
 				}
-
 				return result;
-			}
-
-			private string DoMultOrDiv(string s)
-			{
-				var multIndex = s.IndexOf('*');
-				var divIndex = s.IndexOf('/');
-				var index = 0;
-				if (multIndex == -1 && divIndex == -1) return s;
-				if (multIndex == -1) index = divIndex;
-				else if (divIndex == -1) index = multIndex;
-				else index = Math.Min(multIndex, divIndex);
-				 
-
-				var left = string.Empty;
-				int countLeft = index - 1;
-				while (countLeft >= 0 && char.IsDigit(s[countLeft]))
-				{
-					left += s[countLeft--];
-				}
-				countLeft++;
-
-				var right = string.Empty;
-				var countRight = index + 1;
-				while (countRight < s.Length && char.IsDigit(s[countRight]))
-				{
-					right += s[countRight++];
-				}
-
-				left = new string(left.Reverse().ToArray());
-				var result = s[index] == '*' ? int.Parse(left) * int.Parse(right) : int.Parse(left) / int.Parse(right);
-
-				return s.Substring(0, countLeft) + result.ToString() + s.Substring(countRight, s.Length - countRight);
 			}
 		}
 	}
