@@ -25,12 +25,14 @@ namespace LeetCode206.Reverse_Linked_List_Recursive
 				if (head == null) return null;
 				return Reverse(head, null);
 			}
-
 			private ListNode Reverse(ListNode n, ListNode prev)
 			{
 				var next = n.next;
 				n.next = prev;
-				if (next == null) return n;
+				if (next == null)
+				{
+					return n;
+				}
 				return Reverse(next, n);
 			}
 		}
