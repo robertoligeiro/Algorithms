@@ -17,25 +17,25 @@ namespace LeetCode130.Surrounded_Regions
 		//At last, alter all the '1' to 'O'
 		static void Main(string[] args)
 		{
-			//var board = new char[,] {
-			//	{ 'X', 'X', 'X', 'X'},
-			//	{ 'X', 'O', 'O', 'X'},
-			//	{ 'X', 'X', 'O', 'X'},
-			//	{ 'X', 'O', 'X', 'X'}
-			//};
+			var board = new char[,] {
+				{ 'X', 'X', 'X', 'X'},
+				{ 'X', 'O', 'O', 'X'},
+				{ 'X', 'X', 'O', 'X'},
+				{ 'X', 'O', 'X', 'X'}
+			};
 			//var board = new char[,] {
 			//	{ 'X', 'X', 'X'},
 			//	{ 'X', 'O', 'X'},
 			//	{ 'X', 'X', 'X'}
 			//};
-			var board = new char[,] {
-				{'X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'},
-				{ 'X','X','X','X','X','X','X','X','X','O','O','O','X','X','X','X','X','X','X','X'},
-				{ 'X','X','X','X','X','O','O','O','X','O','X','O','X','X','X','X','X','X','X','X'},
-				{ 'X','X','X','X','X','O','X','O','X','O','X','O','O','O','X','X','X','X','X','X'},
-				{ 'X','X','X','X','X','O','X','O','O','O','X','X','X','X','X','X','X','X','X','X'},
-				{ 'X','X','X','X','X','O','X','X','X','X','X','X','X','X','X','X','X','X','X','X'}
-			};
+			//var board = new char[,] {
+			//	{'X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X','X'},
+			//	{ 'X','X','X','X','X','X','X','X','X','O','O','O','X','X','X','X','X','X','X','X'},
+			//	{ 'X','X','X','X','X','O','O','O','X','O','X','O','X','X','X','X','X','X','X','X'},
+			//	{ 'X','X','X','X','X','O','X','O','X','O','X','O','O','O','X','X','X','X','X','X'},
+			//	{ 'X','X','X','X','X','O','X','O','O','O','X','X','X','X','X','X','X','X','X','X'},
+			//	{ 'X','X','X','X','X','O','X','X','X','X','X','X','X','X','X','X','X','X','X','X'}
+			//};
 			var s = new Solution();
 			s.Solve(board);
 		}
@@ -43,54 +43,59 @@ namespace LeetCode130.Surrounded_Regions
 		{
 			public void Solve(char[,] board)
 			{
-				for (var r = 1; r <= board.GetLength(0) - 2; ++r)
-				{
-					for (var c = 1; c <= board.GetLength(1) - 2; ++c)
-					{
-						if(board[r,c] == 'O')
-							CheckAndTurn(board, new Tuple<int, int>(r, c));
-					}
-				}
-			}
-			private void CheckAndTurn(char[,] board, Tuple<int,int> curr)
-			{
-				var v = new HashSet<Tuple<int, int>>();
-				var q = new Queue<Tuple<int, int>>();
-				q.Enqueue(curr);
-				var path = new List<Tuple<int, int>>();
-				var maxRow = board.GetLength(0) - 1;
-				var maxCol = board.GetLength(1) - 1;
-				while (q.Count > 0)
-				{
-					curr = q.Dequeue();
-					v.Add(curr);
-					if (board[curr.Item1, curr.Item2] == 'O')
-					{
-						if (
-							curr.Item1 == 0 ||
-							curr.Item1 == maxRow ||
-							curr.Item2 == 0 ||
-							curr.Item2 == maxCol)
-						{
-							return;
-						}
-						GetAdj(q, v, curr, maxRow, maxCol);
-						path.Add(curr);
-					}
-				}
-				foreach (var t in path) board[t.Item1, t.Item2] = 'X';
-			}
+				var maxRow = board.GetLength(0)-1;
+				var maxCol = board.GetLength(1)-1;
 
-			private void GetAdj(Queue<Tuple<int, int>> q, HashSet<Tuple<int, int>> v, Tuple<int, int> curr, int maxRow, int maxCol)
+				//turn limits to 1 using dfs
+				for (var r = 0; r < board.GetLength(0); ++r)
+				{
+					if (board[r, 0] == 'O')
+					{
+						CheckAndTurn(board, r, 0);
+					}
+					if (maxCol > 1 && board[r, maxCol] == 'O')
+					{
+						CheckAndTurn(board, r, maxCol);
+					}
+				}
+				for (var c = 0; c < board.GetLength(1); ++c)
+				{
+					if (board[0, c] == 'O')
+					{
+						CheckAndTurn(board, 0, c);
+					}
+					if (maxRow > 1 && board[maxRow, c] == 'O')
+					{
+						CheckAndTurn(board, maxRow, c);
+					}
+				}
+
+				for (int row = 1; row < maxRow; ++row)
+				{
+					for (int col = 1; col < maxCol; ++col)
+					{
+						if (board[row, col] == 'O') board[row, col] = 'X';
+					}
+				}
+				for (int row = 0; row <= maxRow; ++row)
+				{
+					for (int col = 0; col <= maxCol; ++col)
+					{
+						if (board[row, col] == '1') board[row, col] = 'O';
+					}
+				}
+			}
+			private void CheckAndTurn(char[,] board, int row, int col)
 			{
-				var left = new Tuple<int, int>(curr.Item1, curr.Item2 - 1);
-				var right = new Tuple<int, int>(curr.Item1, curr.Item2 + 1);
-				var down = new Tuple<int, int>(curr.Item1 + 1, curr.Item2);
-				var up = new Tuple<int, int>(curr.Item1 - 1, curr.Item2);
-				if (left.Item2 >= 0 && v.Add(left)) q.Enqueue(left);
-				if (right.Item2 <= maxCol && v.Add(right)) q.Enqueue(right);
-				if (up.Item1 >= 0 && v.Add(up)) q.Enqueue(up);
-				if (down.Item1 <= maxRow && v.Add(down)) q.Enqueue(down);
+				if (row < 0 || col < 0 || row >= board.GetLength(0) || col >= board.GetLength(1)) return;
+				if (board[row, col] == 'O')
+				{
+					board[row, col] = '1';
+					CheckAndTurn(board, row + 1, col);
+					CheckAndTurn(board, row - 1, col);
+					CheckAndTurn(board, row, col + 1);
+					CheckAndTurn(board, row, col - 1);
+				}
 			}
 		}
 	}
