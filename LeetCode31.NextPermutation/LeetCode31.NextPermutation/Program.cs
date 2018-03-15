@@ -19,49 +19,35 @@ namespace LeetCode31.NextPermutation
         static void Main(string[] args)
         {
             var s = new Solution();
-            var a = new int[] { 1, 3, 2 };
-            s.NextPermutation(a);
-            a = new int[] { 1, 1, 5 };
-            s.NextPermutation(a);
-            a = new int[] { 1, 3, 2, 1 };
-            s.NextPermutation(a);
-            a = new int[] { 3, 2, 1 };
-            s.NextPermutation(a);
-        }
-        public class Solution
+			var a = new int[] { 1, 3, 2 };
+			s.NextPermutation(a);
+			a = new int[] { 1, 1, 5 };
+			s.NextPermutation(a);
+			a = new int[] { 1, 3, 2, 1 };
+			s.NextPermutation(a);
+			a = new int[] { 3, 2, 1 };
+			s.NextPermutation(a);
+			a = new int[] { 1, 1 };
+			s.NextPermutation(a);
+		}
+		public class Solution
         {
             public void NextPermutation(int[] nums)
             {
-                int k = -1;
-                for (int i = nums.Length - 2; i >= 0; i--)
-                {
-                    if (nums[i] < nums[i + 1])
-                    {
-                        k = i;
-                        break;
-                    }
-                }
-                if (k == -1)
-                {
-                    Array.Reverse(nums);
-                    return;
-                }
-                int l = -1;
-                for (int i = nums.Length - 1; i > k; i--)
-                {
-                    if (nums[i] > nums[k])
-                    {
-                        l = i;
-                        break;
-                    }
-                }
-                //swap(nums[k], nums[l]);
-                var t = nums[k];
-                nums[k] = nums[l];
-                nums[l] = t;
-
-                //reverse(nums.begin() + k + 1, nums.end());
-                Array.Reverse(nums, k + 1, nums.Length - (k + 1));
+				if (nums == null) return;
+				var i = nums.Length-2;
+				while (i >= 0)
+				{
+					if (nums[i] < nums[i + 1]) { break; }
+					--i;
+				}
+				Array.Reverse(nums, i + 1, nums.Length - i - 1);
+				if (i == -1) return;
+				var temp = nums[i];
+				var j = i + 1;
+				while (j < nums.Length && nums[j] <= temp) { ++j; }
+				nums[i] = nums[j];
+				nums[j] = temp;
             }
         }
     }
