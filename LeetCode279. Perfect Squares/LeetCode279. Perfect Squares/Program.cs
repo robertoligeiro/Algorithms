@@ -12,49 +12,37 @@ namespace LeetCode279.Perfect_Squares
         static void Main(string[] args)
         {
             var s = new Solution();
-            var r = s.NumSquares(8829);
-        }
-        public class Solution
+            //var r = s.NumSquares(8829);
+			var r = s.NumSquares(12);
+		}
+		public class Solution
         {
             public int NumSquares(int n)
             {
-                var sqr = Math.Sqrt(n);
-                if (sqr / (int)sqr == 1) return 1;
-                var lSqr = GetSqrs((int)sqr);
-                return NumSquares(n, lSqr, new Dictionary<int, int>(), 0);
-            }
-
-            private int NumSquares(int rest, List<int> squares, Dictionary<int,int> memo, int added)
-            {
-                if (memo.ContainsKey(rest))
-                {
-                    return memo[rest] + added - 1;
-                }
-                if (rest == 0) return added;
-
-                var sqr = Math.Sqrt(rest);
-                if (sqr / (int)sqr == 1) return added+1;
-
-                var respMin = int.MaxValue;
-                for (int i = 0; i < squares.Count; ++i)
-                {
-                    if (rest - squares[i] >= 0)
-                    {
-                        int min = NumSquares(rest - squares[i], squares, memo, added + 1);
-                        respMin = Math.Min(min, respMin);
-                        if (!memo.ContainsKey(rest))
-                        {
-                            memo.Add(rest, respMin - added);
-                        }
-                    }
-                }
-                return respMin;
-            }
-            private List<int> GetSqrs(int n)
-            {
-                var resp = new List<int>() { 1 };
-                for (int i = 2; i <= n; ++i) resp.Add(i * i);
-                return resp;
+				var q = new Queue<int>();
+				q.Enqueue(0);
+				var visited = new HashSet<int>();
+				var depth = 0;
+				while (q.Count > 0)
+				{
+					var size = q.Count;
+					depth++;
+					while (size-- > 0)
+					{
+						var curr = q.Dequeue();
+						for (int i = 1; i * i <= n; i++)
+						{
+							var sum = curr + (i * i);
+							if (sum == n) return depth;
+							if (sum > n) break;
+							if (visited.Add(sum))
+							{
+								q.Enqueue(sum);
+							}
+						}
+					}
+				}
+				return depth;
             }
         }
     }
