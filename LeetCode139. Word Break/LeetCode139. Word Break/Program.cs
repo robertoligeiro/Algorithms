@@ -21,85 +21,25 @@ namespace LeetCode139.Word_Break
 			//	new List<string>() { "cc", "bb", "aa", "bc", "ac", "ca", "ba", "cb" });
 		}
 
-		public class TrieNode
-		{
-			public TrieNode[] children = new TrieNode[26];
-			public bool isEnd;
-		}
-
-		public class Trie
-		{
-			public TrieNode root = new TrieNode();
-			public HashSet<char> foundChars;
-			public void AddWord(string w)
-			{
-				var curr = this.root;
-				foreach (var c in w)
-				{
-					foundChars.Remove(c);
-					if (curr.children[c - 'a'] == null)
-					{
-						curr.children[c - 'a'] = new TrieNode();
-					}
-					curr = curr.children[c - 'a'];
-				}
-				curr.isEnd = true;
-			}
-		}
 		public class Solution
 		{
-			public Trie trie = new Trie();
-			public IList<string> words;
 			public bool WordBreak(string s, IList<string> wordDict)
 			{
-				var len = 0;
-				var h = new HashSet<char>(s.ToArray());
-				trie.foundChars = h;
-				foreach (var w in wordDict)
-				{
-					len += w.Length;
-					this.trie.AddWord(w);
-				}
-
-				if (h.Count != 0) return false;
-				words = wordDict;
-				return IsWordBreak(s, 0);
+				return WordBreak(s, 0, new HashSet<string>(wordDict), new int[s.Length]);
 			}
 
-			public bool IsWordBreak(string s, int index)
+			private bool WordBreak(string s, int index, HashSet<string> words, int[] memo)
 			{
 				if (index == s.Length) return true;
-				var curr = this.trie.root;
-
-				int same = index + 1;
-				for (; same < s.Length; ++same)
-				{
-					if (s[same] != s[same-1]) break;
-				}
-				if (same > index + 1)
-				{
-					var w = s.Substring(index, same - index);
-					foreach (var ss in this.words)
-					{
-						if (w.Contains(ss) && w.Length % ss.Length == 0)
-						{
-							if (w.Length == s.Length || same == s.Length) return true;
-							index = same;
-							break;
-						}
-					}
-				}
-
+				if (memo[index] != 0) return false;
 				for (int i = index; i < s.Length; ++i)
 				{
-					var next = curr.children[s[i] - 'a'];
-					if ( next == null) return false;
-					if (next.isEnd)
+					if (words.Contains(s.Substring(index, i-index+1)) && WordBreak(s, i + 1, words, memo))
 					{
-						if (IsWordBreak(s, i + 1)) return true;
+						return true;
 					}
-					curr = next;
 				}
+				memo[index] = -1;
 				return false;
 			}
 		}
