@@ -44,25 +44,13 @@ namespace LeetCode341.Flatten_Nested_List_Iterator
 
 			private void SetNext()
 			{
-				if (s.Count > 0)
-				{
-					if (s.Peek().IsInteger()) return;
-					if (s.Count > 0)
-					{
-						if (s.Peek().IsInteger()) return;
-						if (s.Peek().GetList().Count == 0)
-						{
-							s.Pop();
-						}
-						else
-						{
-							var next = s.Peek().GetList().First();
-							s.Peek().GetList().RemoveAt(0);
-							s.Push(next);
-						}
-						this.SetNext();
-					}
-				}
+				if (s.Count == 0 || s.Peek().IsInteger()) return;
+				var top = s.Pop();
+				var i = top.GetList().First();
+				top.GetList().RemoveAt(0);
+				if (top.GetList().Count > 0) s.Push(top);
+				if (i.IsInteger() || i.GetList().Count > 0) s.Push(i);
+				SetNext();
 			}
 			public bool HasNext()
 			{
