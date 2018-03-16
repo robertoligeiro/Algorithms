@@ -15,45 +15,45 @@ namespace LeetCode52.NQueensII
             var r = s.TotalNQueens(4);
         }
 
-        public class Solution
-        {
-            public int TotalNQueens(int n)
-            {
-                var queens = new List<Tuple<int,int>>();
-                var count = 0;
-                TotalQueens(n, 0, queens, ref count);
-                return count;
-            }
+		public class Solution
+		{
+			public int TotalNQueens(int n)
+			{
+				var queens = new List<Tuple<int, int>>();
+				return TotalQueens(n, 0, queens);
+			}
 
-            public void TotalQueens(int n, int row, List<Tuple<int, int>> queens, ref int count)
-            {
-                if (row == n)
-                {
-                    count++;
-                    return;
-                } 
+			public int TotalQueens(int n, int row, List<Tuple<int, int>> queens)
+			{
+				if (row == n)
+				{
+					return 1;
+				}
 
-                for (int i = 0; i < n; ++i)
-                {
-                    var t = new Tuple<int, int>(row, i);
-                    if (CanAdd(t, queens))
-                    {
-                        queens.Add(t);
-                        TotalQueens(n, row + 1, queens, ref count);
-                        queens.RemoveAt(queens.Count - 1);
-                    }
-                }
-            }
+				var resp = 0;
+				for (int i = 0; i < n; ++i)
+				{
+					var t = new Tuple<int, int>(row, i);
+					if (CanAdd(t, queens))
+					{
+						queens.Add(t);
+						resp += TotalQueens(n, row + 1, queens);
+						queens.RemoveAt(queens.Count - 1);
+					}
+				}
+				return resp;
+			}
 
-            public bool CanAdd(Tuple<int, int> t, List<Tuple<int, int>> queens)
-            {
-                foreach (var q in queens)
-                {
-                    var diff = Math.Abs(t.Item2 - q.Item2);
-                    if (diff == 0 || diff == t.Item1 - q.Item1) return false;
-                }
-                return true;
-            }
-        }
-    }
+			public bool CanAdd(Tuple<int, int> t, List<Tuple<int, int>> queens)
+			{
+				foreach (var q in queens)
+				{
+					var diff = Math.Abs(t.Item2 - q.Item2);
+					if (diff == 0 || diff == t.Item1 - q.Item1) return false;
+				}
+				return true;
+			}
+		}
+
+	}
 }
