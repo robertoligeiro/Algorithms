@@ -11,6 +11,10 @@ namespace LeetCode662.Maximum_Width_of_Binary_Tree
 	{
 		static void Main(string[] args)
 		{
+			//var t = new TreeNode(0) { left = new TreeNode(1) { left = new TreeNode(9), right = new TreeNode(10)}, right = new TreeNode(2) { right = new TreeNode(11)} };
+			var t = new TreeNode(1) { left = new TreeNode(1) { left = new TreeNode(1) { left = new TreeNode(1) } }, right = new TreeNode(1) { right = new TreeNode(1) { right = new TreeNode(1)} } };
+			var s = new Solution();
+			var r = s.WidthOfBinaryTree(t);
 		}
 		public class TreeNode
 		{
@@ -19,101 +23,36 @@ namespace LeetCode662.Maximum_Width_of_Binary_Tree
 			public TreeNode right;
 			public TreeNode(int x) { val = x; }
 		}
-		public class TreeNodePos
-		{
-			public int pos;
-			public TreeNode n;
-			public TreeNodePos(int x, TreeNode t) { pos = x; n = t; }
-		}
 		public class Solution
 		{
 			public int WidthOfBinaryTree(TreeNode root)
 			{
 				if (root == null) return 0;
-				var q1 = new Queue<TreeNodePos>();
-				var q2 = new Queue<TreeNodePos>();
-				q1.Enqueue(new TreeNodePos(1, root));
-				var maxWidth = 1;
+				var max = 0;
+				var q1 = new Queue<Tuple<int, TreeNode>>();
+				var q2 = new Queue<Tuple<int, TreeNode>>();
+				q1.Enqueue(new Tuple<int, TreeNode>(0, root));
 				while (q1.Count > 0 || q2.Count > 0)
 				{
-					var levelWidth = GetQueueWidth(q1, q2);
-					if (levelWidth == -1) return maxWidth;
-					maxWidth = Math.Max(maxWidth, levelWidth);
-					levelWidth = GetQueueWidth(q2, q1);
-					if (levelWidth == -1) return maxWidth;
-					maxWidth = Math.Max(maxWidth, levelWidth);
+					max = Math.Max(max, MoveQueues(q1, q2));
+					max = Math.Max(max, MoveQueues(q2, q1));
 				}
-				return maxWidth;
+				return max;
 			}
 
-			private int GetQueueWidth(Queue<TreeNodePos> from, Queue<TreeNodePos> to)
+			private int MoveQueues(Queue<Tuple<int, TreeNode>> from, Queue<Tuple<int, TreeNode>> to)
 			{
-				var widthStart = -1;
-				var widthEnd = 0;
+				if (from.Count == 0) return 0;
+				var l = from.FirstOrDefault().Item1;
+				var r = from.LastOrDefault().Item1;
 				while (from.Count > 0)
 				{
-					var curr = from.Dequeue();
-					if (widthStart == -1) widthStart = curr.pos;
-					widthEnd = curr.pos;
-					var leftPos = (curr.pos * 2) - 1;
-					var rightPos = curr.pos * 2;
-					if (curr.n.left != null) to.Enqueue(new TreeNodePos(leftPos, curr.n.left));
-					if (curr.n.right != null) to.Enqueue(new TreeNodePos(rightPos, curr.n.right));
+					var c = from.Dequeue();
+					if (c.Item2.left != null) to.Enqueue(new Tuple<int, TreeNode>(2 * c.Item1, c.Item2.left));
+					if (c.Item2.right != null) to.Enqueue(new Tuple<int, TreeNode>(2 * c.Item1 + 1, c.Item2.right));
 				}
-				if (widthStart == -1) return -1;
-				return widthEnd - widthStart + 1;
-			}
-		}
 
-		public class Solution2
-		{
-			private static TreeNode voidNode = new TreeNode(-1);
-
-			public int WidthOfBinaryTree(TreeNode root)
-			{
-				if (root == null) return 0;
-				var q1 = new Queue<TreeNode>();
-				var q2 = new Queue<TreeNode>();
-				q1.Enqueue(root);
-				var maxWidth = 1;
-				while (q1.Count > 0 || q2.Count > 0)
-				{
-					var levelWidth = GetQueueWidth(q1, q2);
-					if (levelWidth == -1) return maxWidth;
-					maxWidth = Math.Max(maxWidth, levelWidth);
-					levelWidth = GetQueueWidth(q2, q1);
-					if (levelWidth == -1) return maxWidth;
-					maxWidth = Math.Max(maxWidth, levelWidth);
-				}
-				return maxWidth;
-			}
-
-			private int GetQueueWidth(Queue<TreeNode> from, Queue<TreeNode> to)
-			{
-				var widthStart = -1;
-				var widthEnd = 0;
-				var i = 0;
-				while (from.Count > 0)
-				{
-					var curr = from.Dequeue();
-					if (curr != voidNode)
-					{
-						if (widthStart == -1) widthStart = i;
-						widthEnd = i;
-						if (curr.left != null) to.Enqueue(curr.left);
-						else to.Enqueue(voidNode);
-						if (curr.right != null) to.Enqueue(curr.right);
-						else to.Enqueue(voidNode);
-					}
-					else
-					{
-						to.Enqueue(voidNode);
-						to.Enqueue(voidNode);
-					}
-					i++;
-				}
-				if (widthStart == -1) return -1;
-				return widthEnd - widthStart + 1;
+				return r == l ? 1 : (r - l) + 1;
 			}
 		}
 	}
