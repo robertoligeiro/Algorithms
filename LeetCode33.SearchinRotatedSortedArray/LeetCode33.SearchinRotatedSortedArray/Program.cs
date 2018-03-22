@@ -24,15 +24,12 @@ namespace LeetCode33.SearchinRotatedSortedArray
             r = s.Search(new int[] { 4, 5, 6, 7, 0, 1, 2 }, 0);
         }
 
-        public class Solution
-        {
+		public class Solution
+		{
 			public int Search(int[] nums, int target)
 			{
-				return Search(nums, target, 0, nums.Length - 1);
-			}
-			private int Search(int[] nums, int target, int l, int r)
-			{
-				if (l > r) return -1;
+				var l = 0;
+				var r = nums.Length - 1;
 				while (l <= r)
 				{
 					var mid = l + (r - l) / 2;
@@ -50,16 +47,18 @@ namespace LeetCode33.SearchinRotatedSortedArray
 					}
 					else
 					{
-						// this solution also works, but worst case is O(n).
-						//var ret = Search(nums, target, l, mid - 1);
-						//if (ret != -1) return ret;
-						//return Search(nums, target, mid + 1, r);
-						if (target > nums[r] && target < nums[mid]) r = mid - 1;
-						else r = mid - 1;
+						if (nums[mid] > target && nums[r] < target)
+						{
+							r = mid - 1;
+						}
+						else
+						{
+							l = mid + 1;
+						}
 					}
 				}
 				return -1;
 			}
 		}
-    }
+	}
 }
