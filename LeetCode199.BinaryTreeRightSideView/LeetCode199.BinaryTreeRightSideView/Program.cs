@@ -11,6 +11,8 @@ namespace LeetCode199.BinaryTreeRightSideView
     {
         static void Main(string[] args)
         {
+			var s = new Solution();
+			var r = s.RightSideView(new TreeNode(1));
         }
   public class TreeNode {
       public int val;
@@ -29,7 +31,7 @@ namespace LeetCode199.BinaryTreeRightSideView
                 var q1 = new Queue<TreeNode>();
                 var q2 = new Queue<TreeNode>();
                 q1.Enqueue(root);
-                while (q1.Count > 0 && q2.Count > 0)
+                while (q1.Count > 0 || q2.Count > 0)
                 {
                     var add = true;
                     while (q1.Count > 0)
