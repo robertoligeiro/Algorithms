@@ -19,26 +19,22 @@ namespace LeetCode516.Longest_Palindromic_Subsequence
         {
             public int LongestPalindromeSubseq(string s)
             {
-                var max = 0;
-                for (int i = 0; i < s.Length; ++i)
-                {
-                    var odd = GetLongest(s, i, i);
-                    var even = GetLongest(s, i, i + 1);
-                    var localMax = Math.Max(odd, even);
-                    max = Math.Max(localMax, max);
-                }
-                return max;
+				var memo = new Dictionary<Tuple<int, int>, int>();
+				return GetLongest(s, 0, s.Length - 1, memo);
             }
 
-            private int GetLongest(string s, int i, int j)
+            private int GetLongest(string s, int l, int r, Dictionary<Tuple<int, int>, int> memo)
             {
-                int l;
-                int r;
-                for (l = i, r = j; l >= 0 && r < s.Length; --l, ++r)
-                {
-                    if (s[l] != s[r]) break;
-                }
-                return r - l - 1;
+				if (l == r) return 1;
+				if (l > r) return 0;
+				var count = 0;
+				var t = new Tuple<int, int>(l, r);
+				if (memo.TryGetValue(t, out count)) return count;
+				count = s[l] == s[r] 
+					? 2 + GetLongest(s, l + 1, r - 1, memo) 
+					: Math.Max(GetLongest(s, l + 1, r, memo), GetLongest(s, l, r - 1, memo));
+				memo.Add(t, count);
+				return count;
             }
         }
     }
