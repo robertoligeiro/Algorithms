@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Product App</title>
+</head>
+<body>
+
+	<div>
+		<h2>All Products</h2>
+		<ul id="products" />
+	</div>
+	<div>
+		<h2>Search by ID</h2>
+		<input type="text" id="prodId" size="5" />
+		<input type="button" value="Search" onclick="find();" />
+		<p id="product" />
+	</div>
+
+	<div>
+		<h2>Add to Products</h2>
+		<ul id="products" />
+	</div>
+	<div>
+		<h2>Add product by Name</h2>
+		<input type="text" id="prodName" size="5" />
+		<input type="button" value="Add" onclick="add();" />
+		<p id="product" />
+	</div>
+
+	<asp:Content ContentPlaceHolderId="MainContentPlaceHolder" runat="server">
+	<form action="api/ProductsAdd" method="post">
+		<table>
+			<tr>
+				<td>Id:</td>
+				<td><input id="Id" type="text" name="Id"></td>
+				<td>Name:</td>
+				<td><input id="Name" type="text" name="Name"></td>
+				<td>Category:</td>
+				<td><input id="Category" type="text" name="Category"></td>
+				<td>Price:</td>
+				<td><input id="Price" type="text" name="Price"></td>
+			</tr>
+		</table>
+		<input type="submit" value="add">
+	</form>
+	</asp:Content>
+	<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+	<script>
+    var uri = 'api/productsAdd';
+
+    $(document).ready(function () {
+      // Send an AJAX request
+      $.getJSON(uri)
+          .done(function (data) {
+            // On success, 'data' contains a list of products.
+            $.each(data, function (key, item) {
+              // Add a list item for the product.
+              $('<li>', { text: formatItem(item) }).appendTo($('#products'));
+            });
+          });
+    });
+
+    function formatItem(item) {
+      return item.Name + ': $' + item.Price;
+    }
+
+    function find() {
+      var id = $('#prodId').val();
+      $.getJSON(uri + '/' + id)
+          .done(function (data) {
+            $('#product').text(formatItem(data));
+          })
+          .fail(function (jqXHR, textStatus, err) {
+            $('#product').text('Error: ' + err);
+          });
+    }
+    function add() {
+    	var name = $('#prodName').val();
+    	$.post('api/ProductsAdd', '{ Id: 1, Name: test, Category: u, Price: 1 }');
+    }
+	</script>
+</body>
+</html>
