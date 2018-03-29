@@ -12,7 +12,7 @@ namespace LeetCode89.Gray_Code
 		static void Main(string[] args)
 		{
 			var s = new Solution();
-			var r = s.GrayCode(2);
+			var r = s.GrayCode(3);
 		}
 
 		public class Solution
@@ -23,10 +23,10 @@ namespace LeetCode89.Gray_Code
 				resp.Add(0);
 				for (int i = 0; i < n; ++i)
 				{
-					var size = resp.Count-1;
-					for (; size >= 0; size--)
+					var k = 1 << i;
+					for (var size = resp.Count - 1; size >= 0; size--)
 					{
-						var v = resp[size] | 1 << i;
+						var v = resp[size] | k;
 						resp.Add(v);
 					}
 				}
