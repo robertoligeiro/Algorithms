@@ -20,33 +20,24 @@ namespace LeetCode396.Rotate_Function
         {
             public int MaxRotateFunction(int[] A)
             {
-                var resp = new List<List<int>>();
-                GetRotations(new List<int>(A), resp, 0);
-                var max = 0;
-                foreach (var l in resp)
-                {
-                    var v = 0;
-                    for (int i = 0; i < l.Count; ++i)
-                    {
-                        v += l[i] * i;
-                    }
-                    max = Math.Max(v, max);
-                }
-                return max;
-            }
+				var sum = 0;
+				foreach (var i in A) sum += i;
 
-            private void GetRotations(List<int> A, List<List<int>> resp, int rot)
-            {
-                if (rot == A.Count) return;
+				var mult = 0;
+				for (int i = 0; i < A.Length; ++i)
+				{
+					mult += A[i] * i;
+				}
 
-                var start = rot > 0 ? A.GetRange(A.Count - rot, rot) : null;
-                var end = A.GetRange(0, A.Count - rot);
-                var rotArry = new List<int>();
-                if (start != null) rotArry.AddRange(start);
-                rotArry.AddRange(end);
-                resp.Add(rotArry);
-                GetRotations(A, resp, rot + 1);
+				var max = mult;
+				for (int i = 1; i < A.Length; ++i)
+				{
+					var curr = (mult - sum) + (A[i - 1] * A.Length);
+					max = Math.Max(max, curr);
+					mult = curr;
+				}
+				return max;
             }
-        }
+		}
     }
 }
