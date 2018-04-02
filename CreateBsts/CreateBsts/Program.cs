@@ -4,41 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LeetCode95.Unique_Binary_Search_Trees_II
+namespace CreateBsts
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            var s = new Solution();
-            var r = s.GenerateTrees(3);
-        }
-        public class TreeNode
-        {
-            public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int x) { val = x; }
-        }
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			var r = Solution.CreateBsts(4);
+		}
 
-		/**
-		 * Definition for a binary tree node.
-		 * public class TreeNode {
-		 *     public int val;
-		 *     public TreeNode left;
-		 *     public TreeNode right;
-		 *     public TreeNode(int x) { val = x; }
-		 * }
-		 */
+		public class TreeNode
+		{
+			public int val;
+			public TreeNode left;
+			public TreeNode right;
+			public TreeNode(int x) { val = x; }
+		}
 		public class Solution
 		{
-			public IList<TreeNode> GenerateTrees(int n)
+			public static List<TreeNode> CreateBsts(int n)
 			{
-				if (n == 0) return new List<TreeNode>();
 				return CreateBsts(1, n);
 			}
 
-			private IList<TreeNode> CreateBsts(int left, int right)
+			private static List<TreeNode> CreateBsts(int left, int right)
 			{
 				var resp = new List<TreeNode>();
 				if (left > right)
