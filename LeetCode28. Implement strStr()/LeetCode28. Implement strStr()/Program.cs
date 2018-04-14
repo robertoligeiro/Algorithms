@@ -23,17 +23,13 @@ namespace LeetCode28.Implement_strStr__
 				if (string.IsNullOrEmpty(haystack) ||
 					haystack.Length < needle.Length) return -1;
 
-				var deck = new StringBuilder();
-				for (int i = 0; i < needle.Length; ++i)
-				{
-					deck.Append(haystack[i]);
-				}
+				var deck = new StringBuilder(haystack.Substring(0,needle.Length));
 				if (deck.ToString() == needle) return 0;
-				for (int i = 0; i < haystack.Length - needle.Length; ++i)
+				for (int i = needle.Length; i < haystack.Length; ++i)
 				{
 					deck.Remove(0, 1);
-					deck.Append(haystack[needle.Length + i]);
-					if (deck.ToString() == needle) return i + 1;
+					deck.Append(haystack[i]);
+					if (deck.ToString() == needle) return i - needle.Length + 1;
 				}
 				return -1;
 			}
