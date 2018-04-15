@@ -17,12 +17,11 @@ namespace Trie
 			b = t.search("housee");
 		}
 
-		public class TrieNode
+		internal class TrieNode
 		{
-			public TrieNode[] children = new TrieNode[26]; 
-			public bool isEnd;
+			internal TrieNode[] children = new TrieNode[26];
+			internal bool isEnd;
 		}
-
 		public class Trie
 		{
 			private TrieNode root = new TrieNode();
