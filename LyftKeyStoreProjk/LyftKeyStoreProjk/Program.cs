@@ -106,14 +106,30 @@ namespace LyftKeyStoreProjk
 						return new Tuple<string, Tuple<int, int>>(key, new Tuple<int, int>(sortedDictionary.Last().Key, sortedDictionary.Last().Value));
 					}
 
-					for (int i = version; i >= 1; i--)
+					var val = 0;
+					if (sortedDictionary.TryGetValue(version, out val))
 					{
-						var val = 0;
-						if (sortedDictionary.TryGetValue(i, out val))
+						return new Tuple<string, Tuple<int, int>>(key, new Tuple<int, int>(version, val));
+					}
+
+					var keys = sortedDictionary.Keys.ToList();
+					var l = 0;
+					var r = keys.Count() - 1;
+					var k = 0;
+					while (l <= r)
+					{
+						var mid = l + (r - l) / 2;
+						if (keys[mid] < version)
 						{
-							return new Tuple<string, Tuple<int, int>>(key, new Tuple<int, int>(version, val));
+							k = mid;
+							l = mid + 1;
+						}
+						else
+						{
+							r = mid - 1;
 						}
 					}
+					return new Tuple<string, Tuple<int, int>>(key, new Tuple<int, int>(version, sortedDictionary[keys[k]]));
 				}
 
 				return new Tuple<string, Tuple<int, int>>(string.Empty, new Tuple<int, int>(0, 0));
