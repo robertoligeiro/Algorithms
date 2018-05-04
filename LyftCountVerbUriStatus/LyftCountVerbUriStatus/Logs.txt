@@ -1,0 +1,7 @@
+﻿get,g.com,200
+get,g.com,404
+post,g.com,200
+post,g.com,404
+post,g.com,200
+get,g.com,200
+get,y.com,200
