@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Cache
 {
-	public class LruCacheNode
+	internal class LruCacheNode
 	{
 		public LruCacheNode next { get; set; }
 		public LruCacheNode prev { get; set; }
