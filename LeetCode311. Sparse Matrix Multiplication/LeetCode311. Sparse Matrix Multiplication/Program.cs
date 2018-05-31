@@ -13,6 +13,8 @@ namespace LeetCode311.Sparse_Matrix_Multiplication
 		{
 			var A = new int[,] { { 1, 0, 0 }, { -1, 0, 3 } };
 			var B = new int[,] { { 7, 0, 0 }, { 0, 0, 0 }, { 0, 0, 1 } };
+			//var A = new int[,] { { 1, 0, 2 }, { 0, 1, 1 } };
+			//var B = new int[,] { { 1, 2}, { 0, 1 }, { 0, 0 } };
 			var s = new Solution();
 			var r = s.Multiply(A, B);
 		}
