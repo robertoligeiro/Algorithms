@@ -23,33 +23,23 @@ namespace LeetCode606.ConstructStringfromBinaryTree
             public TreeNode(int x) { val = x; }
         }
 
-        public class Solution
-        {
-            public string Tree2str(TreeNode t)
-            {
-                if (t == null) return string.Empty;
-                var sb = new StringBuilder();
-                Tree2str(t, sb);
-                return sb.ToString();
-            }
-
-            private void Tree2str(TreeNode n, StringBuilder sb)
-            {
-                sb.Append(n.val.ToString());
-                if (n.left != null)
-                {
-                    sb.Append("(");
-                    Tree2str(n.left, sb);
-                    sb.Append(")");
-                }
-                else if (n.right != null) sb.Append("()");
-                if (n.right != null)
-                {
-                    sb.Append("(");
-                    Tree2str(n.right, sb);
-                    sb.Append(")");
-                }
-            }
-        }
-    }
+		public class Solution
+		{
+			public string Tree2str(TreeNode t)
+			{
+				if (t == null) return string.Empty;
+				var l = Tree2str(t.left);
+				var r = Tree2str(t.right);
+				if (!string.IsNullOrEmpty(l) || !string.IsNullOrEmpty(r))
+				{
+					l = "(" + l + ")";
+				}
+				if (!string.IsNullOrEmpty(r))
+				{
+					r = "(" + r + ")";
+				}
+				return t.val + l + r;
+			}
+		}
+	}
 }
