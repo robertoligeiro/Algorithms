@@ -11,6 +11,8 @@ namespace LeetCode336.Palindrome_Pairs
 		//https://leetcode.com/problems/palindrome-pairs/description/
 		static void Main(string[] args)
 		{
+			var s = new Solution();
+			var r = s.PalindromePairs(new string[] { "abcd", "dcba", "lls", "s", "sssll" });
 		}
 		public class Solution
 		{
